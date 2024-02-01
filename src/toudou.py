@@ -15,8 +15,11 @@ class Todo:
     due: date
     complete: bool
 
-    def __str__(self) :
-        return f"id : {self.id}, task : {self.task}\n\tdue date : {self.due.strftime('%d/%m/%Y')}, complete : {self.complete}"
+    def __str__(self) -> str :
+        show_date = self.due.strftime('%d/%m/%Y')
+        if self.due.strftime('%d/%m/%Y') == '11/11/1111' :
+            show_date = "-- None --"
+        return f"id: {self.id}, due date: {show_date}, task: {self.task}, complete: {self.complete}"
 
 
 @click.group()
@@ -49,7 +52,7 @@ todo_list = load_csv("todo_list.csv")
 
 @cli.command()
 @click.option("-t", "--task", prompt="Your task", help="The task to remember.")
-@click.option("-d", "--due", type=click.DateTime(formats=["%d/%m/%Y"]), default=date.today().strftime("%d/%m/%Y"), prompt="Due", help="Due of task.")
+@click.option("-d", "--due", type=click.DateTime(formats=["%d/%m/%Y"]), default=datetime(1111,11,11,1,1).strftime("%d/%m/%Y"), prompt="Due", help="Due of task.", show_default=False)
 def create(task: str, due: date):
     todo = Todo(uuid.uuid4(), task, due.date(), False)
     click.echo(todo)
@@ -112,3 +115,9 @@ def update():
 @cli.command()
 def delete():
     os.system("rm todo.p")
+
+
+@cli.command()
+def display_list():
+    for e in todo_list :
+        click.echo(e)
