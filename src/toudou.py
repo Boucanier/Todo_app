@@ -13,6 +13,9 @@ class Todo:
     due: date
     complete: bool
 
+    def __str__(self) :
+        return f"id : {self.id}, task : {self.task}\n\t due date : {self.due.strftime('%d/%m/%Y')}, complete : {self.complete}"
+
 
 @click.group()
 def cli():
@@ -27,3 +30,12 @@ def create(task: str, due: date):
     click.echo(todo)
     with open('todo.p', 'wb') as f:
         pickle.dump(todo, f)
+
+
+
+@cli.command()
+def read():
+    with open('todo.p', 'rb') as f:
+        todo = pickle.load(f)
+    
+    click.echo(todo)
