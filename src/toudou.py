@@ -1,8 +1,9 @@
 import click
 import uuid
-from datetime import date
+from datetime import date, datetime
 import pickle
 import os
+import csv
 
 from dataclasses import dataclass
 
@@ -23,14 +24,41 @@ def cli():
     pass
 
 
+def load_csv(path : str) -> list[Todo]:
+    todo_list = list()
+    if os.path.exists(path):
+        with open(path, "r") as lf :
+            spamreader = csv.reader(lf, delimiter=',')
+
+            for e in spamreader :
+                new_date = datetime.strptime(e[2], "%Y-%m-%d").date()
+                todo_list.append(Todo(e[0], e[1], new_date, e[3]))
+    
+    return todo_list
+
+
+def save_csv(path : str, todo_list : list[Todo]) -> None:
+    with open(path, "w") as sf :
+        writer = csv.writer(sf)
+        for e in todo_list :
+            writer.writerow(e.__dict__.values())
+
+
+todo_list = load_csv("todo_list.csv")
+
+
 @cli.command()
 @click.option("-t", "--task", prompt="Your task", help="The task to remember.")
 @click.option("-d", "--due", type=click.DateTime(formats=["%d/%m/%Y"]), default=date.today().strftime("%d/%m/%Y"), prompt="Due", help="Due of task.")
 def create(task: str, due: date):
-    todo = Todo(uuid.uuid4(), task, due, False)
+    todo = Todo(uuid.uuid4(), task, due.date(), False)
     click.echo(todo)
+    todo_list.append(todo)
+
     with open('todo.p', 'wb') as f:
         pickle.dump(todo, f)
+
+    save_csv("todo_list.csv", todo_list)
 
 
 
