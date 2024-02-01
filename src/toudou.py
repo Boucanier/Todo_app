@@ -2,6 +2,7 @@ import click
 import uuid
 from datetime import date
 import pickle
+import os
 
 from dataclasses import dataclass
 
@@ -14,7 +15,7 @@ class Todo:
     complete: bool
 
     def __str__(self) :
-        return f"id : {self.id}, task : {self.task}\n\t due date : {self.due.strftime('%d/%m/%Y')}, complete : {self.complete}"
+        return f"id : {self.id}, task : {self.task}\n\tdue date : {self.due.strftime('%d/%m/%Y')}, complete : {self.complete}"
 
 
 @click.group()
@@ -60,7 +61,8 @@ def update():
                 todo.task = click.prompt("New task")
             if ans == "d" :
                 new_date = click.prompt("New date", default=date.today().strftime("%d/%m/%Y")).split("/")
-                todo.due = date(int(new_date[2]), int(new_date[1]), int(new_date[0]))
+                if len(new_date) == 3 :
+                    todo.due = date(int(new_date[2]), int(new_date[1]), int(new_date[0]))
             if ans == "s" :
                 todo.complete = not todo.complete
 
@@ -77,3 +79,8 @@ def update():
 
     with open('todo.p', 'wb') as f:
         pickle.dump(todo, f)
+
+
+@cli.command()
+def delete():
+    os.system("rm todo.p")
