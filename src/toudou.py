@@ -36,7 +36,7 @@ def load_csv(path : str) -> list[Todo]:
 
             for e in spamreader :
                 new_date = datetime.strptime(e[2], "%Y-%m-%d").date()
-                todo_list.append(Todo(e[0], e[1], new_date, e[3]))
+                todo_list.append(Todo(uuid.UUID(e[0]), e[1], new_date, bool(e[3])))
     
     return todo_list
 
@@ -53,13 +53,15 @@ todo_list = load_csv(CSV_PATH)
 
 @cli.command()
 @click.option("-t", "--task", prompt="Your task", help="The task to remember.")
-@click.option("-d", "--due", type=click.DateTime(formats=["%d/%m/%Y"]), default=datetime(1111,11,11,1,1).strftime("%d/%m/%Y"), prompt="Due", help="Due of task.", show_default=False)
+@click.option("-d", "--due", type=click.DateTime(formats=["%d/%m/%Y"]), default=date(1111,11,11).strftime("%d/%m/%Y"), prompt="Due", help="Due of task.", show_default=False)
 def create(task: str, due: date):
-    todo = Todo(uuid.uuid4(), task, due.date(), False)
+    if type(due) == datetime :
+        due = due.date()
+    todo = Todo(uuid.uuid4(), task, due, False)
     click.echo(todo)
     todo_list.append(todo)
 
-    with open('todo.p', 'wb') as f:
+    with open('data/todo.p', 'wb') as f:
         pickle.dump(todo, f)
 
     save_csv(CSV_PATH, todo_list)
@@ -68,7 +70,7 @@ def create(task: str, due: date):
 
 @cli.command()
 def read():
-    with open('todo.p', 'rb') as f:
+    with open('data/todo.p', 'rb') as f:
         todo = pickle.load(f)
     
     click.echo(todo)
@@ -77,12 +79,12 @@ def read():
 
 @cli.command()
 def update():
-    with open('todo.p', 'rb') as f:
+    with open('data/todo.p', 'rb') as f:
         todo = pickle.load(f)
         
     click.echo(todo)
     
-    cont = True
+    cont: bool = True
 
     while cont :
         click.echo("What do you want to change ? [task: t / due: d / state: s / nothing: n]")
@@ -110,17 +112,16 @@ def update():
             cont = False
     
     todo_exist: bool = False
-    for i in range(len(todo_list)) :
-        print(todo_list[i])
-        if todo_list[i].id == todo.id :
-            todo_list[i] = todo
+    for e in todo_list :
+        if (e.id == todo.id) :
+            e = todo
             todo_exist = True
             break
     
     if not todo_exist :
         todo_list.append(todo)
 
-    with open('todo.p', 'wb') as f:
+    with open('data/todo.p', 'wb') as f:
         pickle.dump(todo, f)
     
     save_csv(CSV_PATH, todo_list)
@@ -128,7 +129,7 @@ def update():
 
 @cli.command()
 def delete():
-    os.system("rm todo.p")
+    os.remove("data/todo.p")
 
 
 @cli.command()
