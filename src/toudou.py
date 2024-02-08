@@ -7,6 +7,7 @@ import csv
 
 from dataclasses import dataclass
 
+CSV_PATH = "data/todo_list.csv"
 
 @dataclass
 class Todo:
@@ -47,7 +48,7 @@ def save_csv(path : str, todo_list : list[Todo]) -> None:
             writer.writerow(e.__dict__.values())
 
 
-todo_list = load_csv("todo_list.csv")
+todo_list = load_csv(CSV_PATH)
 
 
 @cli.command()
@@ -61,7 +62,7 @@ def create(task: str, due: date):
     with open('todo.p', 'wb') as f:
         pickle.dump(todo, f)
 
-    save_csv("todo_list.csv", todo_list)
+    save_csv(CSV_PATH, todo_list)
 
 
 
@@ -107,9 +108,22 @@ def update():
 
         if ans == "n" :
             cont = False
+    
+    todo_exist: bool = False
+    for i in range(len(todo_list)) :
+        print(todo_list[i])
+        if todo_list[i].id == todo.id :
+            todo_list[i] = todo
+            todo_exist = True
+            break
+    
+    if not todo_exist :
+        todo_list.append(todo)
 
     with open('todo.p', 'wb') as f:
         pickle.dump(todo, f)
+    
+    save_csv(CSV_PATH, todo_list)
 
 
 @cli.command()
