@@ -11,10 +11,10 @@ license = { text = "MIT" }
 
 
 [project.scripts]
-toudou = "toudou:cli"
+toudou = "toudou.views:cli"
 
 
 [build-system]
-requires = ["pdm-pep517"]
-build-backend = "pdm.pep517.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
