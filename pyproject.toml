@@ -5,6 +5,7 @@ description = "A simple task manager."
 readme = "README.md"
 dependencies = [
     "click>=8.1.7",
+    "sqlalchemy>=2.0.27",
 ]
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -15,6 +16,7 @@ toudou = "toudou.views:cli"
 
 
 [build-system]
-requires = ["pdm-backend"]
+requires = ["pdm-backend", "sqlalchemy"]
 build-backend = "pdm.backend"
 
+[tool.pdm]

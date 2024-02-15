@@ -4,6 +4,7 @@ import uuid
 
 from dataclasses import dataclass
 from datetime import datetime
+from sqlalchemy import create_engine, Column, String, Boolean, DateTime, Table, MetaData, Uuid
 
 
 TODO_FOLDER = "db"
@@ -18,7 +19,21 @@ class Todo:
 
 
 def init_db() -> None:
-    os.makedirs(TODO_FOLDER, exist_ok=True)
+    # Avec Pickle
+    # os.makedirs(TODO_FOLDER, exist_ok=True)
+
+    engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
+    metadata = MetaData()
+    todos_table = Table(
+        "todos",
+        metadata,
+        Column("id", Uuid, primary_key=True, default=uuid.uuid4),
+        Column("task", String, nullable=False),
+        Column("complete", Boolean, nullable=False),
+        Column("due", DateTime, nullable=True)
+    )
+
+    metadata.create_all(engine)
 
 
 def read_from_file(filename: str) -> Todo:
