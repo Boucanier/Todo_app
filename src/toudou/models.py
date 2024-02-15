@@ -1,5 +1,5 @@
 import os
-import pickle
+# import pickle
 import select
 import uuid
 
@@ -56,7 +56,10 @@ def read_from_file(filename: str) -> Todo:
         retComplete = row.complete
         retDue = row.due
 
-    return Todo(retId, retTask, retComplete, retDue)
+    if retId:
+        return Todo(retId, retTask, retComplete, retDue)
+    else:
+        return None # type: ignore
 
 
 def write_to_file(todo: Todo, filename: str) -> None:
@@ -116,8 +119,16 @@ def update_todo(
 ) -> None:
     if get_todo(id):
         todo = Todo(id, task=task, complete=complete, due=due)
+        delete_todo(id)
         write_to_file(todo, todo.id.hex)
 
 
 def delete_todo(id: uuid.UUID) -> None:
-    os.remove(os.path.join(TODO_FOLDER, id.hex))
+    # Avec Pickle
+    # os.remove(os.path.join(TODO_FOLDER, id.hex))
+
+    # Avec SQLAlchemy
+    stmt = todos_table.delete().where(todos_table.c.id == id)
+
+    with engine.begin() as conn:
+        conn.execute(stmt)
