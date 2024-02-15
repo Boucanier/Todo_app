@@ -11,6 +11,7 @@ from sqlalchemy import create_engine, Column, String, Boolean, DateTime, Table, 
 TODO_FOLDER = "db"
 
 
+engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
 metadata = MetaData()
 todos_table = Table(
         "todos",
@@ -33,15 +34,29 @@ def init_db() -> None:
     # Avec Pickle
     # os.makedirs(TODO_FOLDER, exist_ok=True)
 
-    engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
+    # Avec SQLAlchemy
     metadata = MetaData()
-
     metadata.create_all(engine)
 
 
 def read_from_file(filename: str) -> Todo:
-    with open(os.path.join(TODO_FOLDER, filename), "rb") as f:
-        return pickle.load(f)
+    # Avec Pickle
+    # with open(os.path.join(TODO_FOLDER, filename), "rb") as f:
+    #     return pickle.load(f)
+
+    # Avec SQLAlchemy
+    stmt = select(todos_table).where(todos_table.c.id == uuid.UUID(filename))
+    with engine.begin() as conn:
+        result = conn.execute(stmt)
+    
+
+    for row in result:
+        retId = row.id
+        retTask = row.task
+        retComplete = row.complete
+        retDue = row.due
+
+    return Todo(retId, retTask, retComplete, retDue)
 
 
 def write_to_file(todo: Todo, filename: str) -> None:
@@ -50,9 +65,6 @@ def write_to_file(todo: Todo, filename: str) -> None:
     #     pickle.dump(todo, f)
 
     # Avec SQLAlchemy
-    engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
-    metadata = MetaData()
-
     stmt = todos_table.insert().values(task=todo.task, complete=todo.complete, due=todo.due)
 
     with engine.begin() as conn:
@@ -82,9 +94,6 @@ def get_all_todos() -> list[Todo]:
     # return result
 
     # Avec SQLAlchemy
-    engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
-    metadata = MetaData()
-
     result = []
 
     with engine.connect() as conn:
