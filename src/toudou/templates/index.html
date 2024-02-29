@@ -33,15 +33,31 @@
     <h1>You have no tickets !</h1>
 {% endif %}
 
-<form id="add_todo" method="GET">
-    <h2>Add a new task</h2>
-    <input type="text" name="task" placeholder="Task" class="task_field" required>
-    <input type="date" name="due" class="task_field">
-    <br>
-    <input type="hidden" name="action" value="add">
-    <input type="reset" value="Reset" class="reset_input">
-    <input type="submit" value="Add task" class="sub_input">
-</form>
+<div id="todos_edit">
+
+    <form class="edit_todo" id="short_form" method="GET">
+        <h2>Add a new task</h2>
+        <input type="text" name="task" placeholder="Task" class="task_field" required>
+        <input type="date" name="due" class="task_field">
+        <br>
+        <input type="hidden" name="action" value="add">
+        <input type="reset" value="Reset" class="reset_input">
+        <input type="submit" value="Add task" class="sub_input">
+    </form>
+
+    <form class="edit_todo" id="long_form" method="GET">
+        <h2>Edit this task</h2>
+        <input type="text" name="task" placeholder="Task" class="task_field" required>
+        <input type="date" name="due" class="task_field">
+        <label id="comp_check" class="task_field">Complete&nbsp: <input type="checkbox" name="complete" value="complete"></label>
+        <br>
+        <input type="hidden" name="action" value="edit">
+        <input type="reset" value="Reset" class="reset_input">
+        <input type="submit" value="Edit" class="sub_input">
+    </form>
+
+</div>
+
 </div>
 </body>
 </html>

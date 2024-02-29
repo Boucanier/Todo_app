@@ -5,6 +5,7 @@ import toudou.models as models
 
 app = Flask(__name__)
 
+# TODO: Update tasks
 @app.route("/toudou/", methods=["GET"])
 def controller():
     if request.args.get('action') == "add":
