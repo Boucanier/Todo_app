@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/theme.css') }}">
     <title>Home</title>
 </head>
 
 <body>
 <h1>Here are your tasks !</h1>
 
+<div id="main_frame">
 {% if todos %}
     <table>
         <tr>
@@ -17,6 +18,7 @@
             <th>Task</th>
             <th>Complete</th>
         </tr>
+
         {% for todo in todos %}
             <tr>
                 <td>{{ todo.id }}</td>
@@ -29,7 +31,17 @@
 
 {% else %}
     <h1>You have no tickets !</h1>
-
 {% endif %}
+
+<form id="add_todo" method="GET">
+    <h2>Add a new task</h2>
+    <input type="text" name="task" placeholder="Task" class="task_field" required>
+    <input type="date" name="due" class="task_field">
+    <br>
+    <input type="hidden" name="action" value="add">
+    <input type="reset" value="Reset" class="reset_input">
+    <input type="submit" value="Add task" class="sub_input">
+</form>
+</div>
 </body>
 </html>

@@ -1,0 +1,61 @@
+html {
+    font-family: Arial;
+}
+
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+tr:has(th) {
+    border: 2px solid black;
+    font-size: 30px;
+}
+
+th {
+    padding: 10px 100px 10px 100px;
+}
+
+td {
+    border: 1px solid grey;
+    padding: 10px;
+}
+
+tr:has(td):hover {
+    background-color: rgb(109, 175, 250);
+}
+
+#main_frame {
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+    justify-content: space-evenly;
+}
+
+#add_todo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    padding: 50px;
+    padding-top: 10px;
+    height: 250px;
+}
+
+#add_todo input {
+    width: 250px;
+    height: 30px;
+}
+
+.reset_input:hover {
+    background-color: rgb(255, 125, 125);
+}
+
+.sub_input:hover {
+    background-color: rgb(109, 175, 250);
+}
+
+.task_field {
+    margin: 10px 0 10px 0;
+}
