@@ -1,0 +1,22 @@
+html {
+    font-family: Arial;
+}
+
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+tr:has(th) {
+    border: 2px solid black;
+    font-size: 30px;
+}
+
+th {
+    padding: 10px 100px 10px 100px;
+}
+
+td {
+    border: 1px solid grey;
+    padding: 10px;
+}

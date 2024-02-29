@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/theme.css') }}">
+    <title>Home</title>
+</head>
+
+<body>
+<h1>Here are your tasks !</h1>
+
+{% if todos %}
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Due</th>
+            <th>Task</th>
+            <th>Complete</th>
+        </tr>
+        {% for todo in todos %}
+            <tr>
+                <td>{{ todo.id }}</td>
+                <td>{{ todo.due }}</td>
+                <td>{{ todo.task }}</td>
+                <td>{{ todo.complete }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% else %}
+    <h1>You have no tickets !</h1>
+
+{% endif %}
+</body>
+</html>
