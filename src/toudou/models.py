@@ -1,4 +1,4 @@
-import os
+# import os
 # import pickle
 import select
 import uuid
@@ -35,7 +35,6 @@ def init_db() -> None:
     # os.makedirs(TODO_FOLDER, exist_ok=True)
 
     # Avec SQLAlchemy
-    metadata = MetaData()
     metadata.create_all(engine)
 
 
@@ -49,7 +48,6 @@ def read_from_file(filename: str) -> Todo:
     with engine.begin() as conn:
         result = conn.execute(stmt)
     
-
     for row in result:
         retId = row.id
         retTask = row.task
@@ -69,7 +67,6 @@ def write_to_file(todo: Todo, filename: str) -> None:
 
     # Avec SQLAlchemy
     stmt = todos_table.insert().values(task=todo.task, complete=todo.complete, due=todo.due)
-
     with engine.begin() as conn:
         conn.execute(stmt)
 
@@ -88,17 +85,15 @@ def get_todo(id: uuid.UUID) -> Todo:
 
 
 def get_all_todos() -> list[Todo]:
+    result = []
+
     # Avec Pickle
-    # result = []
     # for id in os.listdir(TODO_FOLDER):
     #     todo = get_todo(uuid.UUID(id))
     #     if todo:
     #         result.append(todo)
-    # return result
 
     # Avec SQLAlchemy
-    result = []
-
     with engine.connect() as conn:
         for row in conn.execute(select(todos_table)):
             result.append(Todo(
@@ -129,6 +124,5 @@ def delete_todo(id: uuid.UUID) -> None:
 
     # Avec SQLAlchemy
     stmt = todos_table.delete().where(todos_table.c.id == id)
-
     with engine.begin() as conn:
         conn.execute(stmt)
