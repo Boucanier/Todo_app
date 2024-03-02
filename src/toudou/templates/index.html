@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/theme.css') }}">
+    <script src="{{ url_for('static', filename='scripts/update.js') }}"></script>
     <title>Home</title>
 </head>
 
@@ -20,9 +21,9 @@
         </tr>
 
         {% for todo in todos %}
-            <tr>
+            <tr id= {{todo.id}}>
                 <td>{{ todo.id }}</td>
-                <td>{{ todo.due }}</td>
+                <td id="due">{{ todo.due }}</td>
                 <td>{{ todo.task }}</td>
                 <td>{{ todo.complete }}</td>
             </tr>
@@ -35,7 +36,7 @@
 
 <div id="todos_edit">
 
-    <form class="edit_todo" id="short_form" method="GET">
+    <form class="edit_todo" id="add_form" method="GET">
         <h2>Add a new task</h2>
         <input type="text" name="task" placeholder="Task" class="task_field" required>
         <input type="date" name="due" class="task_field">
@@ -45,13 +46,15 @@
         <input type="submit" value="Add task" class="sub_input">
     </form>
 
-    <form class="edit_todo" id="long_form" method="GET">
+    <form class="edit_todo" id="update_form" method="GET">
         <h2>Edit this task</h2>
-        <input type="text" name="task" placeholder="Task" class="task_field" required>
-        <input type="date" name="due" class="task_field">
-        <label id="comp_check" class="task_field">Complete&nbsp: <input type="checkbox" name="complete" value="complete"></label>
+        <h3 id="id_title">No task</h3>
+        <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>
+        <input type="date" name="due" class="task_field" id="update_due">
+        <input type="checkbox" name="complete" value="complete" id="update_comp">
         <br>
-        <input type="hidden" name="action" value="edit">
+        <input type="hidden" name="action" value="update">
+        <input type="hidden" name="id" id="update_id">
         <input type="reset" value="Reset" class="reset_input">
         <input type="submit" value="Edit" class="sub_input">
     </form>

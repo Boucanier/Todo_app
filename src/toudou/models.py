@@ -103,6 +103,8 @@ def get_all_todos() -> list[Todo]:
                 row.due
             ))
 
+    result.sort(key=lambda todo: todo.due or datetime.max)
+
     return result
 
 

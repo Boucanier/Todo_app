@@ -41,14 +41,19 @@ tr:has(td):hover {
     padding: 50px;
     padding-top: 10px;
     margin-bottom: 50px;
+    width: 370px;
 }
 
-#short_form {
+#add_form {
     height: 250px;
 }
 
-#long_form {
-    height: 300px;
+#update_form {
+    height: 350px;
+}
+
+.edit_todo > h3 {
+    margin: 0 0 10px 0;
 }
 
 .edit_todo > input {
