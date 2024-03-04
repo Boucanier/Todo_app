@@ -47,6 +47,8 @@ def read_from_file(filename: str) -> Todo:
     stmt = select(todos_table).where(todos_table.c.id == uuid.UUID(filename))
     with engine.begin() as conn:
         result = conn.execute(stmt)
+
+    retId = None
     
     for row in result:
         retId = row.id

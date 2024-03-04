@@ -42,22 +42,30 @@
         <input type="date" name="due" class="task_field">
         <br>
         <input type="hidden" name="action" value="add">
-        <input type="reset" value="Reset" class="reset_input">
+        <input type="reset" value="Reset">
         <input type="submit" value="Add task" class="sub_input">
     </form>
 
-    <form class="edit_todo" id="update_form" method="GET">
-        <h2>Edit this task</h2>
-        <h3 id="id_title">No task</h3>
-        <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>
-        <input type="date" name="due" class="task_field" id="update_due">
-        <input type="checkbox" name="complete" value="complete" id="update_comp">
+    <div class="edit_todo">
+        <form method="GET" id="update_form">
+            <h2>Edit this task</h2>
+            <h3 id="id_title">No task</h3>
+            <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>
+            <input type="date" name="due" class="task_field" id="update_due">
+            <input type="checkbox" name="complete" value="complete" id="update_comp">
+            <br>
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="id" class="update_id">
+            <input type="reset" value="Reset">
+            <input type="submit" value="Edit" class="sub_input">
+        </form>
         <br>
-        <input type="hidden" name="action" value="update">
-        <input type="hidden" name="id" id="update_id">
-        <input type="reset" value="Reset" class="reset_input">
-        <input type="submit" value="Edit" class="sub_input">
-    </form>
+        <form>
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" class="update_id">
+            <input type="submit" value="Delete" class="del_input">
+        </form>
+    </div>
 
 </div>
 

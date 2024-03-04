@@ -10,6 +10,7 @@ table {
 tr:has(th) {
     border: 2px solid black;
     font-size: 30px;
+    height: 75px;
 }
 
 th {
@@ -19,6 +20,7 @@ th {
 td {
     border: 1px solid grey;
     padding: 10px;
+    height: 35px;
 }
 
 tr:has(td):hover {
@@ -50,13 +52,22 @@ tr:has(td):hover {
 
 #update_form {
     height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.edit_todo > h3 {
+.edit_todo > div > h3 {
     margin: 0 0 10px 0;
 }
 
 .edit_todo > input {
+    width: 250px;
+    height: 30px;
+}
+
+.edit_todo > form > input {
     width: 250px;
     height: 30px;
 }
@@ -75,7 +86,7 @@ tr:has(td):hover {
     height: 30px;
 }
 
-.reset_input:hover {
+.del_input:hover {
     background-color: rgb(255, 125, 125);
 }
 

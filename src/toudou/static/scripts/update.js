@@ -9,7 +9,7 @@ function init() {
 
 function line_on_click() {
     var id = this.getAttribute("id");
-    var id_field = document.getElementById("update_id");
+    var id_field = document.getElementsByClassName("update_id");
     var id_title = document.getElementById("id_title");
     var task = document.getElementById("update_task");
     var due = document.getElementById("update_due");
@@ -26,8 +26,12 @@ function line_on_click() {
         due.value = "";
     }
 
-    id_field.value = id;
     id_title.innerHTML = id;
+    
+    for (var i = 0; i < id_field.length; i++) {
+        id_field[i].value = id;
+    }
+
     task.value = this.children[2].innerHTML;
     completed.checked = Boolean(this.children[3].innerHTML.toLowerCase() == "true");
 }

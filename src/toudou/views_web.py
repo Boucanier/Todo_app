@@ -18,6 +18,9 @@ def controller():
         if request.args.get('complete') :
             new_comp = True
         models.update_todo(uuid.UUID(request.args.get('id', '')), request.args.get('task', ''), new_comp, due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
+    
+    elif request.args.get('action') == "delete":
+        models.delete_todo(uuid.UUID(request.args.get('id', '')))
         
     return render_template("index.html", todos=models.get_all_todos())
 
