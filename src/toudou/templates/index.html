@@ -8,67 +8,76 @@
 </head>
 
 <body>
-<h1>Here are your tasks !</h1>
+    <header>
+        <h1>Todo app</h1>
+        <hr>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="download">Download csv</a>
+        </nav>
+    </header>
 
-<div id="main_frame">
-{% if todos %}
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Due</th>
-            <th>Task</th>
-            <th>Complete</th>
-        </tr>
+    <h1>Here are your tasks !</h1>
 
-        {% for todo in todos %}
-            <tr id= {{todo.id}}>
-                <td>{{ todo.id }}</td>
-                <td id="due">{{ todo.due }}</td>
-                <td>{{ todo.task }}</td>
-                <td>{{ todo.complete }}</td>
+    <div id="main_frame">
+    {% if todos %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Due</th>
+                <th>Task</th>
+                <th>Complete</th>
             </tr>
-        {% endfor %}
-    </table>
 
-{% else %}
-    <h1>You have no tickets !</h1>
-{% endif %}
+            {% for todo in todos %}
+                <tr id= {{todo.id}}>
+                    <td>{{ todo.id }}</td>
+                    <td id="due">{{ todo.due }}</td>
+                    <td>{{ todo.task }}</td>
+                    <td>{{ todo.complete }}</td>
+                </tr>
+            {% endfor %}
+        </table>
 
-<div id="todos_edit">
+    {% else %}
+        <h1>You have no tickets !</h1>
+    {% endif %}
 
-    <form class="edit_todo" id="add_form" method="GET">
-        <h2>Add a new task</h2>
-        <input type="text" name="task" placeholder="Task" class="task_field" required>
-        <input type="date" name="due" class="task_field">
-        <br>
-        <input type="hidden" name="action" value="add">
-        <input type="reset" value="Reset">
-        <input type="submit" value="Add task" class="sub_input">
-    </form>
+    <div id="todos_edit">
 
-    <div class="edit_todo">
-        <form method="GET" id="update_form">
-            <h2>Edit this task</h2>
-            <h3 id="id_title">No task</h3>
-            <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>
-            <input type="date" name="due" class="task_field" id="update_due">
-            <input type="checkbox" name="complete" value="complete" id="update_comp">
+        <form class="edit_todo" id="add_form" method="GET">
+            <h2>Add a new task</h2>
+            <input type="text" name="task" placeholder="Task" class="task_field" required>
+            <input type="date" name="due" class="task_field">
             <br>
-            <input type="hidden" name="action" value="update">
-            <input type="hidden" name="id" class="update_id">
+            <input type="hidden" name="action" value="add">
             <input type="reset" value="Reset">
-            <input type="submit" value="Edit" class="sub_input">
+            <input type="submit" value="Add task" class="sub_input">
         </form>
-        <br>
-        <form>
-            <input type="hidden" name="action" value="delete">
-            <input type="hidden" name="id" class="update_id">
-            <input type="submit" value="Delete" class="del_input">
-        </form>
+
+        <div class="edit_todo">
+            <form method="GET" id="update_form">
+                <h2>Edit this task</h2>
+                <h3 id="id_title">No task</h3>
+                <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>
+                <input type="date" name="due" class="task_field" id="update_due">
+                <input type="checkbox" name="complete" value="complete" id="update_comp">
+                <br>
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="id" class="update_id" required>
+                <input type="reset" value="Reset">
+                <input type="submit" value="Edit" class="sub_input">
+            </form>
+            <br>
+            <form>
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="id" class="update_id" required>
+                <input type="submit" value="Delete" class="del_input">
+            </form>
+        </div>
+
     </div>
 
-</div>
-
-</div>
+    </div>
 </body>
 </html>
