@@ -34,4 +34,14 @@ function line_on_click() {
 
     task.value = this.children[2].innerHTML;
     completed.checked = Boolean(this.children[3].innerHTML.toLowerCase() == "true");
+
+    this.setAttribute("class", "todo_selected");
+
+    allLines = document.getElementsByTagName("tr");
+
+    for (var i = 0; i < allLines.length; i++) {
+        if (allLines[i] != this) {
+            allLines[i].setAttribute("class", "");
+        }
+    }
 }
