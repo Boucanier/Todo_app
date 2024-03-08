@@ -9,8 +9,9 @@ from toudou.models import create_todo, get_all_todos, Todo
 
 def export_to_csv() -> str :
 
-    with open("todos.csv", "w") as file:
-        path = "db/todos.csv"
+    path = "db/todos.csv"
+
+    with open(path, "w") as file:
         csv_writer = csv.writer(file, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([f.name for f in dataclasses.fields(Todo)])
 

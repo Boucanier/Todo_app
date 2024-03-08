@@ -34,7 +34,7 @@ def get(id: uuid.UUID):
 @click.option("--as-csv", is_flag=True, help="Ouput a CSV string.")
 def get_all(as_csv: bool):
     if as_csv:
-        click.echo(services.export_to_csv().getvalue())
+        click.echo(services.export_to_csv())
     else:
         click.echo(models.get_all_todos())
 
