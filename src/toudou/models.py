@@ -106,6 +106,7 @@ def get_all_todos() -> list[Todo]:
             ))
 
     result.sort(key=lambda todo: todo.due or datetime.max)
+    result.sort(key=lambda todo: todo.complete)
 
     return result
 
