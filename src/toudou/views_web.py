@@ -12,10 +12,7 @@ app = Flask(__name__)
 @app.route("/toudou/", methods=["GET"])
 def controller():
     if request.args.get('id', ''):
-        if request.args.get('action') == "add":
-            models.create_todo(request.args.get('task', ''), due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
-
-        elif request.args.get('action') == "update":
+        if request.args.get('action') == "update":
             new_comp = False
             if request.args.get('complete') :
                 new_comp = True
@@ -23,6 +20,9 @@ def controller():
         
         elif request.args.get('action') == "delete":
             models.delete_todo(uuid.UUID(request.args.get('id', '')))
+        
+    if request.args.get('action') == "add":
+        models.create_todo(request.args.get('task', ''), due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
             
     return render_template("index.html", todos=models.get_all_todos())
 
