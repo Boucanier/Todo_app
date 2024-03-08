@@ -3,8 +3,10 @@ html {
 }
 
 table {
-    border: 2px solid black;
     border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
 }
 
 tr:has(th) {
@@ -15,6 +17,19 @@ tr:has(th) {
 
 th {
     padding: 10px 100px 10px 100px;
+}
+
+#small_th {
+    padding: 10px 50px 10px 50px;
+}
+
+tr {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+tr:last-child {
+    border-bottom: 2px solid black;
 }
 
 td {
@@ -67,14 +82,10 @@ tr:has(td):hover {
     margin: 0 0 10px 0;
 }
 
-.edit_todo > input {
+.edit_todo > input, .edit_todo > form > input {
     width: 250px;
     height: 30px;
-}
-
-.edit_todo > form > input {
-    width: 250px;
-    height: 30px;
+    cursor: pointer;
 }
 
 #comp_check{
@@ -124,6 +135,7 @@ nav > a {
     text-decoration: None;
     padding: 10px;
     font-size: 20px;
+    padding-right: 15px;
     border-right: 1px solid white;
 }
 
@@ -136,4 +148,14 @@ header > h1 {
     margin-top: 20px;
     margin-bottom: 30px;
     font-size: 60px;
+}
+
+.task_done {
+    text-align: center;
+    background-color: rgb(78, 185, 124);
+}
+
+.task_not_done {
+    text-align: center;
+    background-color: rgb(228, 96, 96);
 }

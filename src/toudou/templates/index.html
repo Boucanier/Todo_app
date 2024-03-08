@@ -26,7 +26,7 @@
                 <th>ID</th>
                 <th>Due</th>
                 <th>Task</th>
-                <th>Complete</th>
+                <th id="small_th">Complete</th>
             </tr>
 
             {% for todo in todos %}
@@ -34,7 +34,11 @@
                     <td>{{ todo.id }}</td>
                     <td id="due">{{ todo.due }}</td>
                     <td>{{ todo.task }}</td>
-                    <td>{{ todo.complete }}</td>
+                    {% if todo.complete %}
+                        <td class="task_done">Yes</td>
+                    {% else %}
+                        <td class="task_not_done">No</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
