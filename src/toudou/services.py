@@ -8,7 +8,15 @@ from toudou.models import create_todo, get_all_todos, Todo
 
 
 def export_to_csv() -> str :
+    """
+        Export all the Todos to a CSV file
 
+        - Args :
+            - None
+
+        - Returns :
+            - path (str) : the path to the CSV file
+    """
     path = "db/todos.csv"
 
     with open(path, "w") as file:
@@ -22,16 +30,23 @@ def export_to_csv() -> str :
 
 
 def import_from_csv(csv_file: io.StringIO) -> None:
+    """
+        Import all the Todos from a CSV file
+
+        - Args :
+            - csv_file (io.StringIO) : the CSV file to import from
+
+        - Returns :
+            - None
+    """
     csv_reader = csv.DictReader(
         csv_file,
         fieldnames=[f.name for f in dataclasses.fields(Todo)]
     )
-    with open("temp", "w") as file:
-        for row in csv_reader:
-            file.write(str(row))
-            if row["id"] != "id" and row["task"]:
-                create_todo(
-                    task=row["task"],
-                    due=datetime.fromisoformat(row["due"]) if row["due"] else None,
-                    complete=row["complete"] == "True"
-                )
+    for row in csv_reader:
+        if row["id"] != "id" and row["task"]:
+            create_todo(
+                task=row["task"],
+                due=datetime.fromisoformat(row["due"]) if row["due"] else None,
+                complete=row["complete"] == "True"
+            )

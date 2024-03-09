@@ -8,12 +8,21 @@ import toudou.models as models
 
 app = Flask(__name__)
 
-"""The path to the folder where the uploaded files are saved"""
+# The folder where the uploaded files are stored
 UPLOAD_FOLDER = "uploads/"
 
 
 @app.route("/toudou/", methods=["GET", "POST"])
 def controller():
+    """
+        The controller for the Toudou app that handles GET and POST requests
+
+        - Args :
+            - None
+
+        - Returns :
+            - (str) : the HTML for the index page
+    """
     if request.method == "GET":
         if request.args.get('id', ''):
             if request.args.get('action') == "update":
@@ -46,6 +55,15 @@ def index():
 
 @app.route("/toudou/download/")
 def download():
+    """
+        Download the CSV file of all the Todos
+
+        - Args :
+            - None
+
+        - Returns :
+            - (file) : the CSV file of all the Todos
+    """
     path = "../../" + services.export_to_csv()
     return send_file(path, as_attachment=True)
 

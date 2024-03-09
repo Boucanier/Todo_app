@@ -1,3 +1,8 @@
+"""
+    This module contains the model for the Todo application : the Todo class and the functions to interact with the database OR with the pickle files
+    Pickle related actions are commented, as they are not used in the final version of the application
+"""
+
 # import os
 # import pickle
 import select
@@ -24,6 +29,9 @@ todos_table = Table(
 
 @dataclass
 class Todo:
+    """
+        The Todo class, representing a task to do with its completion status and its due date
+    """
     id: uuid.UUID
     task: str
     complete: bool
@@ -31,19 +39,38 @@ class Todo:
 
 
 def init_db() -> None:
-    # Avec Pickle
+    """
+        Database initialization
+        Create the database and the table if they don't exist
+
+        - Args :
+            - None
+
+        - Returns :
+            - None
+    """
+    # With Pickle
     # os.makedirs(TODO_FOLDER, exist_ok=True)
 
-    # Avec SQLAlchemy
+    # With SQLAlchemy
     metadata.create_all(engine)
 
 
 def read_from_file(filename: str) -> Todo:
-    # Avec Pickle
+    """
+        Read a Todo from a file
+
+        - Args :
+            - filename (str) : the name of the file to read from -> Only for Pickle
+
+        - Returns :
+            - (Todo) : the Todo read from the file
+    """
+    # With Pickle
     # with open(os.path.join(TODO_FOLDER, filename), "rb") as f:
     #     return pickle.load(f)
 
-    # Avec SQLAlchemy
+    # With SQLAlchemy
     stmt = select(todos_table).where(todos_table.c.id == uuid.UUID(filename))
     with engine.begin() as conn:
         result = conn.execute(stmt)
@@ -63,11 +90,21 @@ def read_from_file(filename: str) -> Todo:
 
 
 def write_to_file(todo: Todo, filename: str) -> None:
-    # Avec Pickle
+    """
+        Write a Todo to a file
+        
+        - Args :
+            - todo (Todo) : the Todo to write to the file
+            - filename (str) : the name of the file to write to -> Only for Pickle
+            
+        - Returns :
+            - None
+    """
+    # With Pickle
     # with open(os.path.join(TODO_FOLDER, filename), "wb") as f:
     #     pickle.dump(todo, f)
 
-    # Avec SQLAlchemy
+    # With SQLAlchemy
     stmt = todos_table.insert().values(task=todo.task, complete=todo.complete, due=todo.due)
     with engine.begin() as conn:
         conn.execute(stmt)
@@ -78,24 +115,53 @@ def create_todo(
     complete: bool = False,
     due: datetime | None = None
 ) -> None:
+    """
+        Create a new Todo and write it to a file
+
+        - Args :
+            - task (str) : the task of the Todo
+            - complete (bool) : the completion status of the Todo
+            - due (datetime | None) : the due date of the Todo
+
+        - Returns :
+            - None
+    """
     todo = Todo(uuid.uuid4(), task=task, complete=complete, due=due)
     write_to_file(todo, todo.id.hex)
 
 
 def get_todo(id: uuid.UUID) -> Todo:
+    """
+        Get a Todo from a file
+
+        - Args :
+            - id (uuid.UUID) : the id of the Todo to get
+
+        - Returns :
+            - (Todo) : the Todo with the given id
+    """
     return read_from_file(id.hex)
 
 
 def get_all_todos() -> list[Todo]:
+    """
+        Get all the Todos from the files
+
+        - Args :
+            - None
+
+        - Returns :
+            - result (list[Todo]) : a list of all the Todos
+    """
     result = []
 
-    # Avec Pickle
+    # With Pickle
     # for id in os.listdir(TODO_FOLDER):
     #     todo = get_todo(uuid.UUID(id))
     #     if todo:
     #         result.append(todo)
 
-    # Avec SQLAlchemy
+    # With SQLAlchemy
     with engine.connect() as conn:
         for row in conn.execute(select(todos_table)):
             result.append(Todo(
@@ -117,6 +183,18 @@ def update_todo(
     complete: bool,
     due: datetime | None
 ) -> None:
+    """
+        Update a Todo with new values
+
+        - Args :
+            - id (uuid.UUID) : the id of the Todo to update
+            - task (str) : the new task of the Todo
+            - complete (bool) : the new completion status of the Todo
+            - due (datetime | None) : the new due date of the Todo
+
+        - Returns :
+            - None
+    """
     if get_todo(id):
         todo = Todo(id, task=task, complete=complete, due=due)
         delete_todo(id)
@@ -124,10 +202,19 @@ def update_todo(
 
 
 def delete_todo(id: uuid.UUID) -> None:
-    # Avec Pickle
+    """
+        Delete a Todo from the files
+
+        - Args :
+            - id (uuid.UUID) : the id of the Todo to delete
+
+        - Returns :
+            - None
+    """
+    # With Pickle
     # os.remove(os.path.join(TODO_FOLDER, id.hex))
 
-    # Avec SQLAlchemy
+    # With SQLAlchemy
     stmt = todos_table.delete().where(todos_table.c.id == id)
     with engine.begin() as conn:
         conn.execute(stmt)
