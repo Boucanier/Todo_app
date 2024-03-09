@@ -34,7 +34,11 @@ function line_on_click() {
     // Set the date field
     if (s_date != "None") {
         var g_date = this.children[1].innerHTML;
-        s_date = new Date(g_date.split(" ")[0]).toISOString().split("T")[0];
+        var year = g_date.split("/")[2].split(' ').join('');
+        var month = g_date.split("/")[1].split(' ').join('');
+        var day = g_date.split("/")[0].split(' ').join('');
+
+        s_date = [year, month, day].join('-');
         due.value = s_date;
     }
     else {

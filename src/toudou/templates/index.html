@@ -25,7 +25,11 @@
             {% for todo in todos %}
                 <tr id= {{todo.id}}>
                     <td>{{ todo.id }}</td>
-                    <td id="due">{{ todo.due }}</td>
+                    {% if todo.due %}
+                        <td class="due">{{ todo.due.strftime('%d / %m / %Y') }}</td>
+                    {% else %}
+                        <td class="due">None</td>
+                    {% endif %}
                     <td>{{ todo.task }}</td>
                     {% if todo.complete %}
                         <td class="task_done">Yes</td>
