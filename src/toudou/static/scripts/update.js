@@ -8,6 +8,13 @@ function init() {
 }
 
 function line_on_click() {
+    allLines = document.getElementsByTagName("tr");
+
+    for (var i = 0; i < allLines.length; i++) {
+        allLines[i].setAttribute("class", "");
+    }
+
+
     var id = this.getAttribute("id");
     var id_field = document.getElementsByClassName("update_id");
     var id_title = document.getElementById("id_title");
@@ -33,15 +40,13 @@ function line_on_click() {
     }
 
     task.value = this.children[2].innerHTML;
-    completed.checked = Boolean(this.children[3].innerHTML.toLowerCase() == "true");
+
+    if (this.children[3].innerHTML.toLowerCase() == "yes") {
+        completed.checked = true;
+    }
+    else {
+        completed.checked = false;
+    }
 
     this.setAttribute("class", "todo_selected");
-
-    allLines = document.getElementsByTagName("tr");
-
-    for (var i = 0; i < allLines.length; i++) {
-        if (allLines[i] != this) {
-            allLines[i].setAttribute("class", "");
-        }
-    }
 }
