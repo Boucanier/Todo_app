@@ -8,14 +8,7 @@
 </head>
 
 <body>
-    <header>
-        <h1>Todo app</h1>
-        <hr>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="download">Download csv</a>
-        </nav>
-    </header>
+    {% include 'header.html' %}
 
     <h1>Here are your tasks !</h1>
 

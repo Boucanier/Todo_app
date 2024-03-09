@@ -26,9 +26,12 @@ def import_from_csv(csv_file: io.StringIO) -> None:
         csv_file,
         fieldnames=[f.name for f in dataclasses.fields(Todo)]
     )
-    for row in csv_reader:
-        create_todo(
-            task=row["task"],
-            due=datetime.fromisoformat(row["due"]) if row["due"] else None,
-            complete=row["complete"] == "True"
-        )
+    with open("temp", "w") as file:
+        for row in csv_reader:
+            file.write(str(row))
+            if row["id"] != "id" and row["task"]:
+                create_todo(
+                    task=row["task"],
+                    due=datetime.fromisoformat(row["due"]) if row["due"] else None,
+                    complete=row["complete"] == "True"
+                )

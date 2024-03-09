@@ -162,6 +162,7 @@ cython_debug/
 # data files
 data/
 db/
+uploads/
 
 # IDE files
 .vscode/
