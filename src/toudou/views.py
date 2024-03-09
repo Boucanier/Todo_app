@@ -1,60 +1,36 @@
-import click
-import uuid
-
+from flask import Flask, render_template, request, send_file
 from datetime import datetime
+import uuid
+from toudou import services
 
 import toudou.models as models
-import toudou.services as services
 
 
-@click.group()
-def cli():
-    pass
+app = Flask(__name__)
 
 
-@cli.command()
-def init_db():
-    models.init_db()
+@app.route("/toudou/", methods=["GET"])
+def controller():
+    if request.args.get('id', ''):
+        if request.args.get('action') == "update":
+            new_comp = False
+            if request.args.get('complete') :
+                new_comp = True
+            models.update_todo(uuid.UUID(request.args.get('id', '')), request.args.get('task', ''), new_comp, due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
+        
+        elif request.args.get('action') == "delete":
+            models.delete_todo(uuid.UUID(request.args.get('id', '')))
+        
+    if request.args.get('action') == "add":
+        models.create_todo(request.args.get('task', ''), due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
+            
+    return render_template("index.html", todos=models.get_all_todos())
 
+@app.route("/toudou/")
+def index():
+    return render_template("index.html", todos=models.get_all_todos())
 
-@cli.command()
-@click.option("-t", "--task", prompt="Your task", help="The task to remember.")
-@click.option("-d", "--due", type=click.DateTime(), default=None, help="Due date of the task.")
-def create(task: str, due: datetime):
-    models.create_todo(task, due=due)
-
-
-@cli.command()
-@click.option("--id", required=True, type=click.UUID, help="Todo's id.")
-def get(id: uuid.UUID):
-    click.echo(models.get_todo(id))
-
-
-@cli.command()
-@click.option("--as-csv", is_flag=True, help="Ouput a CSV string.")
-def get_all(as_csv: bool):
-    if as_csv:
-        click.echo(services.export_to_csv())
-    else:
-        click.echo(models.get_all_todos())
-
-
-@cli.command()
-@click.argument("csv_file", type=click.File("r"))
-def import_csv(csv_file):
-    services.import_from_csv(csv_file)
-
-
-@cli.command()
-@click.option("--id", required=True, type=click.UUID, help="Todo's id.")
-@click.option("-c", "--complete", required=True, type=click.BOOL, help="Todo is done or not.")
-@click.option("-t", "--task", prompt="Your task", help="The task to remember.")
-@click.option("-d", "--due", type=click.DateTime(), default=None, help="Due date of the task.")
-def update(id: uuid.UUID, complete: bool, task: str, due: datetime):
-    models.update_todo(id, task, complete, due)
-
-
-@cli.command()
-@click.option("--id", required=True, type=click.UUID, help="Todo's id.")
-def delete(id: uuid.UUID):
-    models.delete_todo(id)
+@app.route("/toudou/download/")
+def download():
+    path = "../../" + services.export_to_csv()
+    return send_file(path, as_attachment=True)
