@@ -40,6 +40,10 @@ def controller():
     elif request.method == "POST":
         if request.files:
             file = request.files["file"]
+            
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+
             filename = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(filename)
             file = open(filename)
