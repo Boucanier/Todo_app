@@ -7,6 +7,9 @@ from datetime import datetime
 from toudou.models import create_todo, get_all_todos, Todo
 
 
+DATA_FOLDER = "data"
+
+
 def export_to_csv() -> str :
     """
         Export all the Todos to a CSV file
@@ -17,7 +20,7 @@ def export_to_csv() -> str :
         - Returns :
             - path (str) : the path to the CSV file
     """
-    path = "db/todos.csv"
+    path = DATA_FOLDER + "/todos.csv"
 
     with open(path, "w") as file:
         csv_writer = csv.writer(file, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)

@@ -3,8 +3,8 @@
     Pickle related actions are commented, as they are not used in the final version of the application
 """
 
-# import os
 # import pickle
+import os
 import select
 import uuid
 
@@ -49,8 +49,7 @@ def init_db() -> None:
         - Returns :
             - None
     """
-    # With Pickle
-    # os.makedirs(TODO_FOLDER, exist_ok=True)
+    os.makedirs(TODO_FOLDER, exist_ok=True)
 
     # With SQLAlchemy
     metadata.create_all(engine)
