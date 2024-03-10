@@ -1,6 +1,8 @@
 window.onload = init;
 
-
+/**
+ * Initializes the functions linked to the todo table.
+ */
 function init() {
     // Add event listeners to the table rows
     lines = document.getElementsByTagName("tr");
