@@ -161,6 +161,9 @@ def get_all_todos() -> list[Todo]:
     #         result.append(todo)
 
     # With SQLAlchemy
+    if not os.path.exists(TODO_FOLDER + "/todos.db"):
+        init_db()
+        
     with engine.connect() as conn:
         for row in conn.execute(select(todos_table)):
             result.append(Todo(
