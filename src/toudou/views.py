@@ -53,8 +53,8 @@ def index():
     return render_template("index.html", todos=models.get_all_todos())
 
 
-@app.route("/toudou/download/")
-def download():
+@app.route("/toudou/export/")
+def export():
     """
         Download the CSV file of all the Todos
 
@@ -68,6 +68,6 @@ def download():
     return send_file(path, as_attachment=True)
 
 
-@app.route("/toudou/upload/")
-def upload():
-    return render_template("upload.html")
+@app.route("/toudou/import/")
+def import_csv():
+    return render_template("import.html")
