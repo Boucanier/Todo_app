@@ -125,6 +125,10 @@ def create_todo(
         - Returns :
             - None
     """
+    # With SQLAlchemy
+    if not os.path.exists(TODO_FOLDER + "/todos.db"):
+        init_db()
+        
     todo = Todo(uuid.uuid4(), task=task, complete=complete, due=due)
     write_to_file(todo, todo.id.hex)
 
