@@ -13,7 +13,7 @@ from datetime import datetime
 from sqlalchemy import create_engine, Column, String, Boolean, DateTime, Table, MetaData, Uuid, select
 
 
-TODO_FOLDER = "db"
+TODO_FOLDER = "data"
 
 
 engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
