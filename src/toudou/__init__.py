@@ -1,7 +1,9 @@
+import os
+
 config = dict(
-    DATABASE_PATH="data/todos.db",
-    DATABASE_URL="sqlite:///data/todos.db",
-    UPLOAD_FOLDER="uploads",
-    DATA_FOLDER="data",
-    DEBUG=True
+    DATABASE_PATH=os.getenv("TOUDOU_DATABASE_PATH", ""),
+    DATABASE_URL=os.getenv("TOUDOU_DATABASE_URL", ""),
+    UPLOAD_FOLDER=os.getenv("TOUDOU_UPLOAD_FOLDER", ""),
+    DATA_FOLDER=os.getenv("TOUDOU_DATA_FOLDER", ""),
+    DEBUG=os.getenv("TOUDOU_DEBUG", "False") == "True",
 )

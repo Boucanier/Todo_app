@@ -20,4 +20,7 @@ toudou = "toudou.views_cli:cli"
 requires = ["pdm-backend", "sqlalchemy"]
 build-backend = "pdm.backend"
 
-[tool.pdm]
+[tool.pdm.scripts]
+_.env_file = "dev.env"
+start.env_file = "dev.env"
+start.cmd = "flask --app toudou.views --debug run"
