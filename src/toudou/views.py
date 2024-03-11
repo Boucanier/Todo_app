@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, redirect, render_template, request, send_file, Blueprint, url_for
 from datetime import datetime
 import uuid, os
 from toudou import services
@@ -6,13 +6,19 @@ from toudou import services
 import toudou.models as models
 
 
-app = Flask(__name__)
+web_ui = Blueprint('web_ui', __name__, url_prefix="/toudou")
 
 # The folder where the uploaded files are stored
 UPLOAD_FOLDER = "uploads/"
 
 
-@app.route("/toudou/", methods=["GET", "POST"])
+@web_ui.route("/", defaults={"page": "index"})
+@web_ui.route("/<page>")
+def show(page):
+        return render_template(f"{page}.html", todos=models.get_all_todos())
+
+
+@web_ui.route("/controller", methods=["GET", "POST"])
 def controller():
     """
         The controller for the Toudou app that handles GET and POST requests
@@ -49,15 +55,10 @@ def controller():
             file = open(filename)
             services.import_from_csv(file)
             
-    return render_template("index.html", todos=models.get_all_todos())
+    return redirect(url_for('web_ui.show'))
 
 
-@app.route("/toudou/")
-def index():
-    return render_template("index.html", todos=models.get_all_todos())
-
-
-@app.route("/toudou/export/")
+@web_ui.route("export/")
 def export():
     """
         Download the CSV file of all the Todos
@@ -72,6 +73,13 @@ def export():
     return send_file(path, as_attachment=True)
 
 
-@app.route("/toudou/import/")
+@web_ui.route("import/")
 def import_csv():
     return render_template("import.html")
+
+
+def create_app():
+    app = Flask(__name__)
+    from toudou.views import web_ui
+    app.register_blueprint(web_ui)
+    return app

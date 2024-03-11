@@ -46,7 +46,7 @@
 
     <div id="todos_edit">
 
-        <form class="edit_todo" id="add_form" method="GET">
+        <form class="edit_todo" id="add_form" method="GET" action="{{ url_for('web_ui.controller') }}">
             <h2>Add a new task</h2>
             <input type="text" name="task" placeholder="Task" class="task_field" required>
             <input type="date" name="due" class="task_field">
@@ -57,7 +57,7 @@
         </form>
 
         <div class="edit_todo">
-            <form method="GET" id="update_form">
+            <form method="GET" id="update_form" action="{{ url_for('web_ui.controller') }}">
                 <h2>Edit this task</h2>
                 <h3 id="id_title">No task</h3>
                 <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>
@@ -70,7 +70,7 @@
                 <input type="submit" value="Edit" class="sub_input">
             </form>
             <br>
-            <form>
+            <form method="GET" action="{{ url_for('web_ui.controller') }}">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="id" class="update_id" required>
                 <input type="submit" value="Delete" class="del_input">
