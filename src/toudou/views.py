@@ -73,11 +73,6 @@ def export():
     return send_file(path, as_attachment=True)
 
 
-@web_ui.route("import/")
-def import_csv():
-    return render_template("import.html")
-
-
 def create_app():
     app = Flask(__name__)
     from toudou.views import web_ui

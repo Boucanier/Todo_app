@@ -4,6 +4,6 @@
     <nav>
         <a href="{{ url_for('web_ui.show') }}">Home</a>
         <a href="{{ url_for('web_ui.export') }}">Export csv</a>
-        <a href="{{ url_for('web_ui.import_csv') }}">Import csv</a>
+        <a href="{{ url_for('web_ui.show', page='import') }}">Import csv</a>
     </nav>
 </header>
