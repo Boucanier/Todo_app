@@ -1,15 +1,12 @@
 from flask import Flask, redirect, render_template, request, send_file, Blueprint, url_for
 from datetime import datetime
 import uuid, os
-from toudou import services
+from toudou import services, config
 
 import toudou.models as models
 
 
 web_ui = Blueprint('web_ui', __name__, url_prefix="/toudou")
-
-# The folder where the uploaded files are stored
-UPLOAD_FOLDER = "uploads/"
 
 
 @web_ui.route("/", defaults={"page": "index"})
@@ -47,10 +44,10 @@ def controller():
         if request.files:
             file = request.files["file"]
             
-            if not os.path.exists(UPLOAD_FOLDER):
-                os.makedirs(UPLOAD_FOLDER)
+            if not os.path.exists(config['UPLOAD_FOLDER']):
+                os.makedirs(config['UPLOAD_FOLDER'])
 
-            filename = os.path.join(UPLOAD_FOLDER, file.filename)
+            filename = os.path.join(config['UPLOAD_FOLDER'], file.filename)
             file.save(filename)
             file = open(filename)
             services.import_from_csv(file)

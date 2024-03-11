@@ -11,12 +11,10 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from sqlalchemy import create_engine, Column, String, Boolean, DateTime, Table, MetaData, Uuid, select
+from toudou import config
 
 
-TODO_FOLDER = "data"
-
-
-engine = create_engine("sqlite:///" + TODO_FOLDER + "/todos.db", echo=True)
+engine = create_engine(config['DATABASE_URL'], echo=True)
 metadata = MetaData()
 todos_table = Table(
         "todos",
@@ -49,7 +47,7 @@ def init_db() -> None:
         - Returns :
             - None
     """
-    os.makedirs(TODO_FOLDER, exist_ok=True)
+    os.makedirs(config['DATA_FOLDER'], exist_ok=True)
 
     # With SQLAlchemy
     metadata.create_all(engine)
@@ -126,7 +124,7 @@ def create_todo(
             - None
     """
     # With SQLAlchemy
-    if not os.path.exists(TODO_FOLDER + "/todos.db"):
+    if not os.path.exists(config['DATABASE_PATH']):
         init_db()
         
     todo = Todo(uuid.uuid4(), task=task, complete=complete, due=due)
@@ -165,7 +163,7 @@ def get_all_todos() -> list[Todo]:
     #         result.append(todo)
 
     # With SQLAlchemy
-    if not os.path.exists(TODO_FOLDER + "/todos.db"):
+    if not os.path.exists(config['DATABASE_PATH']):
         init_db()
         
     with engine.connect() as conn:
