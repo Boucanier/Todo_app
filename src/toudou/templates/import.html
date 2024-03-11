@@ -11,7 +11,7 @@
 
     <h1>Upload a csv file to add tasks</h1>
 
-    <form method="POST" enctype="multipart/form-data" id="upload_form" action="{{ url_for('web_ui.show') }}">
+    <form method="POST" enctype="multipart/form-data" id="upload_form" action="{{ url_for('web_ui.controller') }}">
         <input type="hidden" name="action" value="upload">
         <input type="file" name="file" id="file" accept=".csv" required>
         <input type="submit" value="Upload csv" class="sub_input">
