@@ -46,18 +46,19 @@
 
     <div id="todos_edit">
 
-        <form class="edit_todo" id="add_form" method="GET" action="{{ url_for('web_ui.controller') }}">
+        <form class="edit_todo" id="add_form" method="POST" action="{{ url_for('web_ui.controller') }}">
+            {{ add_form.csrf_token }}
             <h2>Add a new task</h2>
-            <input type="text" name="task" placeholder="Task" class="task_field" required>
-            <input type="date" name="due" class="task_field">
+            {{ add_form.task(class='task_field') }}
+            {{ add_form.due(class='task_field') }}
             <br>
-            <input type="hidden" name="action" value="add">
+            {{ add_form.action(value='add') }}
             <input type="reset" value="Reset">
             <input type="submit" value="Add task" class="sub_input">
         </form>
 
         <div class="edit_todo">
-            <form method="GET" id="update_form" action="{{ url_for('web_ui.controller') }}">
+            <form method="POST" id="update_form" action="{{ url_for('web_ui.controller') }}">
                 <h2>Edit this task</h2>
                 <h3 id="id_title">No task</h3>
                 <input type="text" name="task" placeholder="Task" class="task_field" id="update_task" required>

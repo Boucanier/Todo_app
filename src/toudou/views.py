@@ -2,17 +2,18 @@ from flask import Flask, redirect, render_template, request, send_file, Blueprin
 from datetime import datetime
 import uuid, os
 from toudou import services, config
+from toudou.forms import AddForm, UpdateForm, DeleteForm
 
 import toudou.models as models
 
 
-web_ui = Blueprint('web_ui', __name__, url_prefix="/toudou")
+web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 
 
 @web_ui.route("/", defaults={"page": "index"})
 @web_ui.route("/<page>")
 def show(page):
-        return render_template(f"{page}.html", todos=models.get_all_todos())
+    return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm())
 
 
 @web_ui.route("/controller", methods=["GET", "POST"])
@@ -27,21 +28,29 @@ def controller():
             - (str) : the HTML for the index page
     """
     if request.method == "GET":
-        if request.args.get('id', ''):
-            if request.args.get('action') == "update":
+        if request.args.get('action') == "delete":
+            models.delete_todo(uuid.UUID(request.args.get('id', '')))
+
+    if request.method == "POST":
+        if request.form.get('id', ''):
+            if request.form.get('action') == "update":
+                form = UpdateForm()
                 new_comp = False
-                if request.args.get('complete') :
+                if request.form.get('complete') :
                     new_comp = True
-                models.update_todo(uuid.UUID(request.args.get('id', '')), request.args.get('task', ''), new_comp, due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
+                if form.validate_on_submit():
+                    models.update_todo(uuid.UUID(request.args.get('id', '')), request.args.get('task', ''), new_comp, due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
+                else:
+                    return render_template("index.html", todos=models.get_all_todos(), ad_form=form)
             
-            elif request.args.get('action') == "delete":
-                models.delete_todo(uuid.UUID(request.args.get('id', '')))
-            
-        if request.args.get('action') == "add":
-            models.create_todo(request.args.get('task', ''), due=((datetime.strptime(request.args.get('due', ''), "%Y-%m-%d")).date() if request.args.get('due') else None)) # type: ignore
+        if request.form.get('action') == "add":
+            form = AddForm()
+            if form.validate_on_submit():
+                models.create_todo(request.form.get('task', ''), due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
+            else:
+                return redirect(url_for('web_ui.show'))
     
-    elif request.method == "POST":
-        if request.files:
+        elif request.files:
             file = request.files["file"]
             
             if not os.path.exists(config['UPLOAD_FOLDER']):
@@ -72,6 +81,7 @@ def export():
 
 def create_app():
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = config['SECRET_KEY']
     from toudou.views import web_ui
     app.register_blueprint(web_ui)
     return app

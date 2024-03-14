@@ -33,6 +33,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "flask-wtf"
+version = "1.2.1"
+requires_python = ">=3.8"
+summary = "Form rendering, validation, and CSRF protection for Flask with WTForms."
+dependencies = [
+    "flask",
+    "itsdangerous",
+    "wtforms",
+]
+
+[[package]]
 name = "greenlet"
 version = "3.0.3"
 requires_python = ">=3.7"
@@ -84,9 +95,18 @@ dependencies = [
     "MarkupSafe>=2.1.1",
 ]
 
+[[package]]
+name = "wtforms"
+version = "3.1.2"
+requires_python = ">=3.8"
+summary = "Form validation and rendering for Python web development."
+dependencies = [
+    "markupsafe",
+]
+
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:7453e77118b362e3bd771d0529b8854ef87030941c9109fcf83360fb56867c0f"
+content_hash = "sha256:832b2483a230adbf3127e9ea2d5d2686192c6f17ad9c8a570418dee8587d0f9a"
 
 [metadata.files]
 "blinker 1.7.0" = [
@@ -104,6 +124,10 @@ content_hash = "sha256:7453e77118b362e3bd771d0529b8854ef87030941c9109fcf83360fb5
 "flask 3.0.2" = [
     {url = "https://files.pythonhosted.org/packages/3f/e0/a89e8120faea1edbfca1a9b171cff7f2bf62ec860bbafcb2c2387c0317be/flask-3.0.2.tar.gz", hash = "sha256:822c03f4b799204250a7ee84b1eddc40665395333973dfb9deebfe425fefcb7d"},
     {url = "https://files.pythonhosted.org/packages/93/a6/aa98bfe0eb9b8b15d36cdfd03c8ca86a03968a87f27ce224fb4f766acb23/flask-3.0.2-py3-none-any.whl", hash = "sha256:3232e0e9c850d781933cf0207523d1ece087eb8d87b23777ae38456e2fbe7c6e"},
+]
+"flask-wtf 1.2.1" = [
+    {url = "https://files.pythonhosted.org/packages/02/2b/0f0cf68a2f052ea3dbb8b6c8c2a7e8aea5e6df7410f5e289437fefbeb461/flask_wtf-1.2.1-py3-none-any.whl", hash = "sha256:fa6793f2fb7e812e0fe9743b282118e581fb1b6c45d414b8af05e659bd653287"},
+    {url = "https://files.pythonhosted.org/packages/9b/ef/b6ec35e02f479f6e76e02ede14594c9cfa5e6dcbab6ea0e82fa413993a2a/flask_wtf-1.2.1.tar.gz", hash = "sha256:8bb269eb9bb46b87e7c8233d7e7debdf1f8b74bf90cc1789988c29b37a97b695"},
 ]
 "greenlet 3.0.3" = [
     {url = "https://files.pythonhosted.org/packages/0b/8a/f5140c8713f919af0e98e6aaa40cb20edaaf3739d18c4a077581e2422ac4/greenlet-3.0.3-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:da70d4d51c8b306bb7a031d5cff6cc25ad253affe89b70352af5f1cb68e74b53"},
@@ -293,4 +317,8 @@ content_hash = "sha256:7453e77118b362e3bd771d0529b8854ef87030941c9109fcf83360fb5
 "werkzeug 3.0.1" = [
     {url = "https://files.pythonhosted.org/packages/0d/cc/ff1904eb5eb4b455e442834dabf9427331ac0fa02853bf83db817a7dd53d/werkzeug-3.0.1.tar.gz", hash = "sha256:507e811ecea72b18a404947aded4b3390e1db8f826b494d76550ef45bb3b1dcc"},
     {url = "https://files.pythonhosted.org/packages/c3/fc/254c3e9b5feb89ff5b9076a23218dafbc99c96ac5941e900b71206e6313b/werkzeug-3.0.1-py3-none-any.whl", hash = "sha256:90a285dc0e42ad56b34e696398b8122ee4c681833fb35b8334a095d82c56da10"},
+]
+"wtforms 3.1.2" = [
+    {url = "https://files.pythonhosted.org/packages/18/19/c3232f35e24dccfad372e9f341c4f3a1166ae7c66e4e1351a9467c921cc1/wtforms-3.1.2-py3-none-any.whl", hash = "sha256:bf831c042829c8cdbad74c27575098d541d039b1faa74c771545ecac916f2c07"},
+    {url = "https://files.pythonhosted.org/packages/6a/c7/96d10183c3470f1836846f7b9527d6cb0b6c2226ebca40f36fa29f23de60/wtforms-3.1.2.tar.gz", hash = "sha256:f8d76180d7239c94c6322f7990ae1216dae3659b7aa1cee94b6318bdffb474b9"},
 ]
