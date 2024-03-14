@@ -72,9 +72,10 @@
                 <input type="submit" value="Edit" class="sub_input">
             </form>
             <br>
-            <form method="GET" action="{{ url_for('web_ui.controller') }}">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" class="update_id" required>
+            <form method="POST" action="{{ url_for('web_ui.controller') }}">
+                {{ delete_form.csrf_token }}
+                {{ delete_form.action(value='delete') }}
+                {{ delete_form.id(class='update_id') }}
                 <input type="submit" value="Delete" class="del_input">
             </form>
         </div>

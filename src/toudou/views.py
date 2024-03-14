@@ -31,8 +31,15 @@ def controller():
         if request.args.get('action') == "delete":
             models.delete_todo(uuid.UUID(request.args.get('id', '')))
 
-    if request.method == "POST":
-        if request.form.get('id', ''):
+    if request.method == "POST":            
+        if request.form.get('action') == "add":
+            form = AddForm()
+            if form.validate_on_submit():
+                models.create_todo(request.form.get('task', ''), due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
+            else:
+                return redirect(url_for('web_ui.show'))
+            
+        elif request.form.get('id', ''):
             if request.form.get('action') == "update":
                 form = UpdateForm()
                 new_comp = False
@@ -43,12 +50,12 @@ def controller():
                 else:
                     return redirect(url_for('web_ui.show'))
             
-        if request.form.get('action') == "add":
-            form = AddForm()
-            if form.validate_on_submit():
-                models.create_todo(request.form.get('task', ''), due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
-            else:
-                return redirect(url_for('web_ui.show'))
+            elif request.form.get('action') == "delete":
+                form = DeleteForm()
+                if form.validate_on_submit():
+                    models.delete_todo(uuid.UUID(request.form.get('id', '')))
+                else:
+                    return redirect(url_for('web_ui.show'))
     
         elif request.files:
             file = request.files["file"]
