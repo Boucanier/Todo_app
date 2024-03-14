@@ -10,8 +10,8 @@ class AddForm(FlaskForm):
 class UpdateForm(FlaskForm):
     id = HiddenField("id", validators=[DataRequired()])
     task = StringField("task", validators=[DataRequired()])
-    due = DateField("due", validators=[DataRequired()])
-    complete = BooleanField("complete", validators=[DataRequired()])
+    due = DateField("due", validators=[Optional()])
+    complete = BooleanField("complete", validators=[Optional()])
     action = HiddenField("action", validators=[DataRequired()])
 
 class DeleteForm(FlaskForm):
