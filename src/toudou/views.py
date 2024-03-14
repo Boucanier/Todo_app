@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, send_file, Blueprint, url_for
 from datetime import datetime
-import uuid, os, logging
+import uuid, os
 from toudou import services, config
 from toudou.forms import AddForm, UpdateForm, DeleteForm
 

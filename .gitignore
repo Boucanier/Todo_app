@@ -166,3 +166,6 @@ uploads/
 
 # IDE files
 .vscode/
+
+# Logs folder
+logs/
