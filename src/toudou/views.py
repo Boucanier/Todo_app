@@ -59,9 +59,6 @@ def controller():
     
         elif request.files:
             file = request.files["file"]
-            
-            if not os.path.exists(config['UPLOAD_FOLDER']):
-                os.makedirs(config['UPLOAD_FOLDER'])
 
             filename = os.path.join(config['UPLOAD_FOLDER'], file.filename)
             file.save(filename)
