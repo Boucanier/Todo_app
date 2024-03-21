@@ -3,6 +3,7 @@ from datetime import datetime
 import uuid, os, logging
 from toudou import services, config
 from toudou.forms import AddForm, UpdateForm, DeleteForm
+from toudou.auth import *
 
 import toudou.models as models
 
@@ -12,12 +13,14 @@ web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 
 @web_ui.route("/", defaults={"page": "index"})
 @web_ui.route("/<page>")
+@auth.login_required
 def show(page):
     logging.info(f"Rendering {page}.html")
     return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm())
 
 
 @web_ui.route("/controller", methods=["GET", "POST"])
+@auth.login_required
 def controller():
     """
         The controller for the Toudou app that handles GET and POST requests
@@ -70,6 +73,7 @@ def controller():
 
 
 @web_ui.route("export/")
+@auth.login_required
 def export():
     """
         Download the CSV file of all the Todos
@@ -83,6 +87,21 @@ def export():
     logging.info(f"Exporting Todos to CSV")
     path = "../../" + services.export_to_csv()
     return send_file(path, as_attachment=True)
+
+
+@web_ui.route("out/")
+def out():
+    """
+        Log out the user
+
+        - Args :
+            - None
+
+        - Returns :
+            - (str) : the HTML for the login page
+    """
+    logging.info(f"Logging out user {auth.current_user()}")
+    return redirect("http://user:user@localhost:5000/")
 
 
 def create_app():

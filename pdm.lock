@@ -33,6 +33,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "flask-httpauth"
+version = "4.8.0"
+summary = "HTTP authentication for Flask routes"
+dependencies = [
+    "flask",
+]
+
+[[package]]
 name = "flask-wtf"
 version = "1.2.1"
 requires_python = ">=3.8"
@@ -106,7 +114,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:832b2483a230adbf3127e9ea2d5d2686192c6f17ad9c8a570418dee8587d0f9a"
+content_hash = "sha256:30470c450468ba0cccd36bcb68d458623a3350de3caacd9c51c9f45ec2d53a70"
 
 [metadata.files]
 "blinker 1.7.0" = [
@@ -124,6 +132,10 @@ content_hash = "sha256:832b2483a230adbf3127e9ea2d5d2686192c6f17ad9c8a570418dee85
 "flask 3.0.2" = [
     {url = "https://files.pythonhosted.org/packages/3f/e0/a89e8120faea1edbfca1a9b171cff7f2bf62ec860bbafcb2c2387c0317be/flask-3.0.2.tar.gz", hash = "sha256:822c03f4b799204250a7ee84b1eddc40665395333973dfb9deebfe425fefcb7d"},
     {url = "https://files.pythonhosted.org/packages/93/a6/aa98bfe0eb9b8b15d36cdfd03c8ca86a03968a87f27ce224fb4f766acb23/flask-3.0.2-py3-none-any.whl", hash = "sha256:3232e0e9c850d781933cf0207523d1ece087eb8d87b23777ae38456e2fbe7c6e"},
+]
+"flask-httpauth 4.8.0" = [
+    {url = "https://files.pythonhosted.org/packages/22/21/0160aa217c4df74e44a04919213f9c8af7e68551c10267b055f1e09d421c/Flask-HTTPAuth-4.8.0.tar.gz", hash = "sha256:66568a05bc73942c65f1e2201ae746295816dc009edd84b482c44c758d75097a"},
+    {url = "https://files.pythonhosted.org/packages/83/c4/e64ace124b927cd1f29270050ee0e0ef5faad75a512c5c8d733961dda9ca/Flask_HTTPAuth-4.8.0-py3-none-any.whl", hash = "sha256:a58fedd09989b9975448eef04806b096a3964a7feeebc0a78831ff55685b62b0"},
 ]
 "flask-wtf 1.2.1" = [
     {url = "https://files.pythonhosted.org/packages/02/2b/0f0cf68a2f052ea3dbb8b6c8c2a7e8aea5e6df7410f5e289437fefbeb461/flask_wtf-1.2.1-py3-none-any.whl", hash = "sha256:fa6793f2fb7e812e0fe9743b282118e581fb1b6c45d414b8af05e659bd653287"},
