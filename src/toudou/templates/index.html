@@ -45,6 +45,7 @@
         <h1>You have no tickets !</h1>
     {% endif %}
 
+    {% if role == 'admin' %}
     <div id="todos_edit">
 
         <form class="edit_todo" id="add_form" method="POST" action="{{ url_for('web_ui.controller') }}">
@@ -82,6 +83,7 @@
         </div>
 
     </div>
+    {% endif %}
 
     </div>
 </body>

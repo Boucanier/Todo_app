@@ -14,4 +14,6 @@ users = {
 def verify_password(username, password):
     if username in users and check_password_hash(users.get(username), password):
         logging.info(f"User {username} has been authenticated")
+        auth.current_user = username
+        auth.current_role = "admin" if username == "admin" else "noob"
         return username

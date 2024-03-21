@@ -15,8 +15,12 @@ web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 @web_ui.route("/<page>")
 @auth.login_required
 def show(page):
-    logging.info(f"Rendering {page}.html")
-    return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm())
+    if auth.current_role == "noob" and page not in ("index", "export"):
+        return redirect(url_for('web_ui.show'))
+    
+    else :
+        logging.info(f"Rendering {page}.html")
+        return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.current_role)
 
 
 @web_ui.route("/controller", methods=["GET", "POST"])
@@ -31,43 +35,44 @@ def controller():
         - Returns :
             - (str) : the HTML for the index page
     """
-    if request.method == "POST":
-        if request.form.get('action') == "add":
-            form = AddForm()
-            if form.validate_on_submit():
-                logging.info(f"Adding a new Todo: {request.form.get('task', '')}")
-                models.create_todo(request.form.get('task', ''), due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
-            else:
-                return redirect(url_for('web_ui.show'))
-            
-        elif request.form.get('id', ''):
-            if request.form.get('action') == "update":
-                form = UpdateForm()
-                new_comp = False
-                if request.form.get('complete'):
-                    new_comp = True
+    if auth.current_role == "admin" :
+        if request.method == "POST":
+            if request.form.get('action') == "add":
+                form = AddForm()
                 if form.validate_on_submit():
-                    logging.info(f"Updating Todo: {request.form.get('task', '')}")
-                    models.update_todo(uuid.UUID(request.form.get('id', '')), request.form.get('task', ''), new_comp, due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
+                    logging.info(f"Adding a new Todo: {request.form.get('task', '')}")
+                    models.create_todo(request.form.get('task', ''), due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
                 else:
                     return redirect(url_for('web_ui.show'))
-            
-            elif request.form.get('action') == "delete":
-                form = DeleteForm()
-                if form.validate_on_submit():
-                    logging.info(f"Deleting Todo: {request.form.get('id', '')}")
-                    models.delete_todo(uuid.UUID(request.form.get('id', '')))
-                else:
-                    return redirect(url_for('web_ui.show'))
-    
-        elif request.files:
-            file = request.files["file"]
+                
+            elif request.form.get('id', ''):
+                if request.form.get('action') == "update":
+                    form = UpdateForm()
+                    new_comp = False
+                    if request.form.get('complete'):
+                        new_comp = True
+                    if form.validate_on_submit():
+                        logging.info(f"Updating Todo: {request.form.get('task', '')}")
+                        models.update_todo(uuid.UUID(request.form.get('id', '')), request.form.get('task', ''), new_comp, due=((datetime.strptime(request.form.get('due', ''), "%Y-%m-%d")).date() if request.form.get('due') else None)) # type: ignore
+                    else:
+                        return redirect(url_for('web_ui.show'))
+                
+                elif request.form.get('action') == "delete":
+                    form = DeleteForm()
+                    if form.validate_on_submit():
+                        logging.info(f"Deleting Todo: {request.form.get('id', '')}")
+                        models.delete_todo(uuid.UUID(request.form.get('id', '')))
+                    else:
+                        return redirect(url_for('web_ui.show'))
+        
+            elif request.files:
+                file = request.files["file"]
 
-            filename = os.path.join(config['UPLOAD_FOLDER'], file.filename)
-            file.save(filename)
-            file = open(filename)
-            logging.info(f"Importing Todos from CSV: {filename}")
-            services.import_from_csv(file)
+                filename = os.path.join(config['UPLOAD_FOLDER'], file.filename)
+                file.save(filename)
+                file = open(filename)
+                logging.info(f"Importing Todos from CSV: {filename}")
+                services.import_from_csv(file)
             
     return redirect(url_for('web_ui.show'))
 
@@ -98,9 +103,9 @@ def out():
             - None
 
         - Returns :
-            - (str) : the HTML for the login page
+            - (str) : the HTML for the index page
     """
-    logging.info(f"Logging out user {auth.current_user()}")
+    logging.info(f"Logging out user {auth.current_user}")
     return redirect("http://user:user@localhost:5000/")
 
 
