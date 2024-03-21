@@ -15,12 +15,12 @@ web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 @web_ui.route("/<page>")
 @auth.login_required
 def show(page):
-    if auth.current_role == "noob" and page not in ("index", "export"):
+    if auth.current_user['role'] == "noob" and page not in ("index", "export"):
         return redirect(url_for('web_ui.show'))
     
     else :
         logging.info(f"Rendering {page}.html")
-        return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.current_role)
+        return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.current_user['role'])
 
 
 @web_ui.route("/controller", methods=["GET", "POST"])
@@ -35,7 +35,7 @@ def controller():
         - Returns :
             - (str) : the HTML for the index page
     """
-    if auth.current_role == "admin" :
+    if auth.current_user['role'] == "admin" :
         if request.method == "POST":
             if request.form.get('action') == "add":
                 form = AddForm()
@@ -105,7 +105,7 @@ def out():
         - Returns :
             - (str) : the HTML for the index page
     """
-    logging.info(f"Logging out user {auth.current_user}")
+    logging.info(f"Logging out user {auth.current_user['username']}")
     return redirect("http://user:user@localhost:5000/")
 
 
