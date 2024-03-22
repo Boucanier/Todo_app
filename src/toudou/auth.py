@@ -1,6 +1,5 @@
 from flask_httpauth import HTTPBasicAuth
-from werkzeug.security import generate_password_hash
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 
 auth = HTTPBasicAuth()
@@ -10,13 +9,15 @@ users = {
     "noob": generate_password_hash("noob")
 }
 
-roles = { "admin": "admin", "noob": "noob" }
+roles = { "admin": list("admin"), "noob": list("noob") }
 
 @auth.verify_password
 def verify_password(username, password):
     if username in users and check_password_hash(users.get(username), password):
         logging.info(f"User {username} has been authenticated")
-        auth.current_user = dict()
-        auth.current_user['role'] = roles[username]
-        auth.current_user['username'] = username
         return username
+    
+
+@auth.get_user_roles
+def get_user_roles(user):
+    return roles.get(user)

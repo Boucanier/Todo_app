@@ -4,8 +4,8 @@
     <nav>
         <a href="{{ url_for('web_ui.show') }}">Home</a>
         <a href="{{ url_for('web_ui.export') }}">Export csv</a>
-        {% if role == 'admin' %}
-        <a href="{{ url_for('web_ui.show', page='import') }}">Import csv</a>
+        {% if 'admin' in role %}
+            <a href="{{ url_for('web_ui.show', page='import') }}">Import csv</a>
         {% endif %}
         <a href="{{ url_for('web_ui.out') }}">Log out</a>
     </nav>

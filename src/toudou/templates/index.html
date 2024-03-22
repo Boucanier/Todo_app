@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/theme.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='resources/favicon.ico') }}">
-    <script src="{{ url_for('static', filename='scripts/update.js') }}"></script>
+    {% if 'admin' in role %}
+        <script src="{{ url_for('static', filename='scripts/update.js') }}"></script>
+    {% endif %}
     <title>Home</title>
 </head>
 
@@ -45,44 +47,44 @@
         <h1>You have no tickets !</h1>
     {% endif %}
 
-    {% if role == 'admin' %}
-    <div id="todos_edit">
+    {% if 'admin' in role %}
+        <div id="todos_edit">
 
-        <form class="edit_todo" id="add_form" method="POST" action="{{ url_for('web_ui.controller') }}">
-            {{ add_form.csrf_token }}
-            <h2>Add a new task</h2>
-            {{ add_form.task(class='task_field', placeholder='New task') }}
-            {{ add_form.due(class='task_field') }}
-            <br>
-            {{ add_form.action(value='add') }}
-            <input type="reset" value="Reset">
-            <input type="submit" value="Add task" class="sub_input">
-        </form>
-
-        <div class="edit_todo">
-            <form method="POST" id="update_form" action="{{ url_for('web_ui.controller') }}">
-                {{ update_form.csrf_token }}
-                <h2>Edit this task</h2>
-                <h3 id="id_title">No task</h3>
-                {{ update_form.task(class='task_field', id='update_task', placeholder='Edit task') }}
-                {{ update_form.due(class='task_field', id='update_due') }}
-                {{ update_form.complete(value='complete', id='update_comp') }}
+            <form class="edit_todo" id="add_form" method="POST" action="{{ url_for('web_ui.controller') }}">
+                {{ add_form.csrf_token }}
+                <h2>Add a new task</h2>
+                {{ add_form.task(class='task_field', placeholder='New task') }}
+                {{ add_form.due(class='task_field') }}
                 <br>
-                {{ update_form.action(value='update') }}
-                {{ update_form.id(class='update_id') }}
+                {{ add_form.action(value='add') }}
                 <input type="reset" value="Reset">
-                <input type="submit" value="Edit" class="sub_input">
+                <input type="submit" value="Add task" class="sub_input">
             </form>
-            <br>
-            <form method="POST" action="{{ url_for('web_ui.controller') }}">
-                {{ delete_form.csrf_token }}
-                {{ delete_form.action(value='delete') }}
-                {{ delete_form.id(class='update_id') }}
-                <input type="submit" value="Delete" class="del_input">
-            </form>
-        </div>
 
-    </div>
+            <div class="edit_todo">
+                <form method="POST" id="update_form" action="{{ url_for('web_ui.controller') }}">
+                    {{ update_form.csrf_token }}
+                    <h2>Edit this task</h2>
+                    <h3 id="id_title">No task</h3>
+                    {{ update_form.task(class='task_field', id='update_task', placeholder='Edit task') }}
+                    {{ update_form.due(class='task_field', id='update_due') }}
+                    {{ update_form.complete(value='complete', id='update_comp') }}
+                    <br>
+                    {{ update_form.action(value='update') }}
+                    {{ update_form.id(class='update_id') }}
+                    <input type="reset" value="Reset">
+                    <input type="submit" value="Edit" class="sub_input">
+                </form>
+                <br>
+                <form method="POST" action="{{ url_for('web_ui.controller') }}">
+                    {{ delete_form.csrf_token }}
+                    {{ delete_form.action(value='delete') }}
+                    {{ delete_form.id(class='update_id') }}
+                    <input type="submit" value="Delete" class="del_input">
+                </form>
+            </div>
+
+        </div>
     {% endif %}
 
     </div>

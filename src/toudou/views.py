@@ -15,12 +15,12 @@ web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 @web_ui.route("/<page>")
 @auth.login_required
 def show(page):
-    if auth.current_user['role'] == "noob" and page not in ("index", "export"):
+    if "noob" in auth.get_user_roles(auth.username()) and page not in ("index", "export"):
         return redirect(url_for('web_ui.show'))
     
     else :
         logging.info(f"Rendering {page}.html")
-        return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.current_user['role'])
+        return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.get_user_roles(auth.username()))
 
 
 @web_ui.route("/controller", methods=["GET", "POST"])
@@ -35,7 +35,7 @@ def controller():
         - Returns :
             - (str) : the HTML for the index page
     """
-    if auth.current_user['role'] == "admin" :
+    if "admin" in auth.get_user_roles(auth.username()):
         if request.method == "POST":
             if request.form.get('action') == "add":
                 form = AddForm()
@@ -73,7 +73,8 @@ def controller():
                 file = open(filename)
                 logging.info(f"Importing Todos from CSV: {filename}")
                 services.import_from_csv(file)
-            
+                file.close()
+                
     return redirect(url_for('web_ui.show'))
 
 
@@ -105,7 +106,7 @@ def out():
         - Returns :
             - (str) : the HTML for the index page
     """
-    logging.info(f"Logging out user {auth.current_user['username']}")
+    logging.info(f"Logging out user {auth.username()}")
     return redirect("http://user:user@localhost:5000/")
 
 
