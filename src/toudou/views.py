@@ -1,9 +1,9 @@
-from flask import Flask, redirect, render_template, request, send_file, Blueprint, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, send_file, Blueprint, url_for
 from datetime import datetime
 import uuid, os, logging
 from toudou import services, config
 from toudou.forms import AddForm, UpdateForm, DeleteForm
-from toudou.auth import *
+from toudou.auth import auth
 
 import toudou.models as models
 
@@ -15,12 +15,15 @@ web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 @web_ui.route("/<page>")
 @auth.login_required
 def show(page):
-    if "noob" in auth.get_user_roles(auth.username()) and page not in ("index", "export"):
-        return redirect(url_for('web_ui.show'))
-    
-    else :
-        logging.info(f"Rendering {page}.html")
-        return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.get_user_roles(auth.username()))
+    if os.path.exists(os.path.join("src", "toudou", "templates", f"{page}.html")):
+        if "noob" in auth.get_user_roles(auth.username()) and page not in ("index", "export"):
+            return redirect(url_for('web_ui.show'))
+        
+        else :
+            logging.info(f"Rendering {page}.html")
+            return render_template(f"{page}.html", todos=models.get_all_todos(), add_form=AddForm(), update_form=UpdateForm(), delete_form=DeleteForm(), role=auth.get_user_roles(auth.username()))
+    else:
+        abort(404)
 
 
 @web_ui.route("/controller", methods=["GET", "POST"])
@@ -108,6 +111,44 @@ def out():
     """
     logging.info(f"Logging out user {auth.username()}")
     return redirect("http://user:user@localhost:5000/")
+
+
+# Error Handlers
+
+@web_ui.errorhandler(401)
+def handle_401(error):
+    flash("401: Unauthorized")
+    logging.exception(error)
+    return redirect(url_for('web_ui.show'))
+
+
+@web_ui.errorhandler(403)
+def handle_403(error):
+    flash("403: Forbidden")
+    logging.exception(error)
+    return redirect(url_for('web_ui.show'))
+
+
+@web_ui.errorhandler(404)
+def handle_404(error):
+    flash("404: Page not found")
+    logging.exception(error)
+    return redirect(url_for('web_ui.show'))
+
+
+@web_ui.errorhandler(405)
+def handle_405(error):
+    flash("405: Method Not Allowed")
+    logging.exception(error)
+    return redirect(url_for('web_ui.show'))
+
+
+@web_ui.errorhandler(500)
+def handle_500(error):
+    flash("500: Internal Server Error")
+    logging.exception(error)
+    return redirect(url_for('web_ui.show'))
+
 
 
 def create_app():
