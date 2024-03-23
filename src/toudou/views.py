@@ -11,6 +11,13 @@ import toudou.models as models
 web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 
 
+# Routes
+
+@web_ui.route("/error/<code>", methods=["GET", "POST"])
+def error(code):
+    return render_template(f"error.html", role=auth.get_user_roles(auth.username()), error=code)
+
+
 @web_ui.route("/", defaults={"page": "index"})
 @web_ui.route("/<page>")
 @auth.login_required
@@ -119,35 +126,35 @@ def out():
 def handle_401(error):
     flash("401: Unauthorized")
     logging.exception(error)
-    return redirect(url_for('web_ui.show'))
+    return redirect(url_for('web_ui.error', code=401))
 
 
 @web_ui.errorhandler(403)
 def handle_403(error):
     flash("403: Forbidden")
     logging.exception(error)
-    return redirect(url_for('web_ui.show'))
+    return redirect(url_for('web_ui.error', code=403))
 
 
 @web_ui.errorhandler(404)
 def handle_404(error):
     flash("404: Page not found")
     logging.exception(error)
-    return redirect(url_for('web_ui.show'))
+    return redirect(url_for('web_ui.error', code=404))
 
 
 @web_ui.errorhandler(405)
 def handle_405(error):
     flash("405: Method Not Allowed")
     logging.exception(error)
-    return redirect(url_for('web_ui.show'))
+    return redirect(url_for('web_ui.error', code=405))
 
 
 @web_ui.errorhandler(500)
 def handle_500(error):
     flash("500: Internal Server Error")
     logging.exception(error)
-    return redirect(url_for('web_ui.show'))
+    return redirect(url_for('web_ui.error', code=500))
 
 
 
