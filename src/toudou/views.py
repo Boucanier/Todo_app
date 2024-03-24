@@ -23,8 +23,8 @@ def error(code):
 @auth.login_required
 def show(page):
     if os.path.exists(os.path.join("src", "toudou", "templates", f"{page}.html")):
-        if "noob" in auth.get_user_roles(auth.username()) and page not in ("index", "export"):
-            return redirect(url_for('web_ui.show'))
+        if "user" in auth.get_user_roles(auth.username()) and page not in ("index", "export"):
+            abort(403)
         
         else :
             logging.info(f"Rendering {page}.html")
@@ -117,7 +117,7 @@ def out():
             - (str) : the HTML for the index page
     """
     logging.info(f"Logging out user {auth.username()}")
-    return redirect("http://user:user@localhost:5000/")
+    return redirect("http://nouser:nouser@localhost:5000/")
 
 
 # Error Handlers

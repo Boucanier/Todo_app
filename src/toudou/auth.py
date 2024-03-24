@@ -6,10 +6,10 @@ auth = HTTPBasicAuth()
 
 users = {
     "admin": generate_password_hash("admin"),
-    "noob": generate_password_hash("noob")
+    "user": generate_password_hash("user")
 }
 
-roles = { "admin": list("admin"), "noob": list("noob") }
+roles = { "admin": list("admin"), "user": list("user") }
 
 @auth.verify_password
 def verify_password(username, password):
