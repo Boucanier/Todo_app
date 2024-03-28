@@ -24,4 +24,4 @@ def verify_token(token):
 class Todo(BaseModel):
     task: constr() = Field(..., description="The task to do") # type: ignore
     complete: bool = Field(False, description="The completion status of the task")
-    due: datetime = Field(None, description="The due date of the task")
+    due: constr() = Field(None, description="The due date of the task") # type: ignore

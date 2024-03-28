@@ -170,7 +170,7 @@ def create_todo():
     """
     data = request.json
     logging.info(f"Adding a new Todo: {data}")
-    models.create_todo(data['task'])
+    models.create_todo(data['task'], due=(datetime.strptime(data['due'], "%Y-%m-%d") if 'due' in data.keys() else None))
 
     return {"message": "Todo created"}, 201
 
