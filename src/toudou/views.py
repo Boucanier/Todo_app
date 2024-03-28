@@ -1,14 +1,17 @@
-from flask import Flask, abort, flash, redirect, render_template, request, send_file, Blueprint, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, send_file, Blueprint, url_for, jsonify
 from datetime import datetime
 import uuid, os, logging
 from toudou import services, config
 from toudou.forms import AddForm, UpdateForm, DeleteForm
 from toudou.auth import auth
+from flask_pydantic_spec import FlaskPydanticSpec, Request
+from toudou.api import api_auth
 
 import toudou.models as models
 
 
 web_ui = Blueprint('web_ui', __name__, url_prefix="/")
+api = FlaskPydanticSpec('flask')
 
 
 # Routes
@@ -118,6 +121,23 @@ def out():
     """
     logging.info(f"Logging out user {auth.username()}")
     return redirect("http://nouser:nouser@localhost:5000/")
+
+
+# REST API
+
+@web_ui.route("/api/todos", methods=["GET"])
+@api_auth.login_required
+def get_todos():
+    """
+        Get all the Todos
+
+        - Args :
+            - None
+
+        - Returns :
+            - (list) : the list of all the Todos
+    """
+    return jsonify(models.get_all_todos())
 
 
 # Error Handlers
