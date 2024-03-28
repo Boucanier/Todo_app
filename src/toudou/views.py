@@ -140,6 +140,21 @@ def get_todos():
     return jsonify(models.get_all_todos())
 
 
+@web_ui.route("/api/todos/<id>", methods=["GET"])
+@api_auth.login_required
+def get_todo_by_id(id):
+    """
+        Get a Todo by its ID
+
+        - Args :
+            - id (str) : the ID of the Todo
+
+        - Returns :
+            - (dict) : the Todo
+    """
+    return jsonify(models.get_todo(uuid.UUID(id)))
+
+
 # Error Handlers
 
 @web_ui.errorhandler(401)
