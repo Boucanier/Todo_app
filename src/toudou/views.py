@@ -5,7 +5,7 @@ from toudou import services, config
 from toudou.forms import AddForm, UpdateForm, DeleteForm
 from toudou.auth import auth
 from flask_pydantic_spec import FlaskPydanticSpec, Request
-from toudou.api import api_auth
+from toudou.api import api_auth, Todo
 
 import toudou.models as models
 
@@ -153,6 +153,26 @@ def get_todo_by_id(id):
             - (dict) : the Todo
     """
     return jsonify(models.get_todo(uuid.UUID(id)))
+
+
+@web_ui.route("/api/todos", methods=["POST"])
+@api_auth.login_required
+@api.validate(body=Request(Todo))
+def create_todo():
+    """
+        Create a new Todo
+
+        - Args :
+            - None
+
+        - Returns :
+            - (str) : the HTML for the index page
+    """
+    data = request.json
+    logging.info(f"Adding a new Todo: {data}")
+    models.create_todo(data['task'])
+
+    return {"message": "Todo created"}, 201
 
 
 # Error Handlers

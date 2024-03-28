@@ -1,4 +1,6 @@
+from datetime import datetime
 from flask_httpauth import HTTPTokenAuth
+from pydantic import BaseModel, Field, constr
 import logging
 
 api_auth = HTTPTokenAuth(scheme='Bearer')
@@ -18,3 +20,8 @@ def verify_token(token):
     else:
         logging.error(f"Token {token} is invalid")
         return None
+
+class Todo(BaseModel):
+    task: constr() = Field(..., description="The task to do") # type: ignore
+    complete: bool = Field(False, description="The completion status of the task")
+    due: datetime = Field(None, description="The due date of the task")
