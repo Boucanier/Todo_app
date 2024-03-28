@@ -9,7 +9,7 @@ users = {
     "user": generate_password_hash("user")
 }
 
-roles = { "admin": list("admin"), "user": list("user") }
+roles = { "admin": ["admin", "user"], "user": ["user"] }
 
 @auth.verify_password
 def verify_password(username, password):
