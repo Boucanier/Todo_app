@@ -4,14 +4,11 @@ import uuid, os, logging
 from toudou import services, config
 from toudou.forms import AddForm, UpdateForm, DeleteForm
 from toudou.auth import auth
-from flask_pydantic_spec import FlaskPydanticSpec, Request
-from toudou.api import api_auth, Todo
 
 import toudou.models as models
 
 
 web_ui = Blueprint('web_ui', __name__, url_prefix="/")
-api = FlaskPydanticSpec('flask')
 
 
 # Routes
@@ -123,60 +120,6 @@ def out():
     return redirect("http://nouser:nouser@localhost:5000/")
 
 
-# REST API
-
-@web_ui.route("/api/todos", methods=["GET"])
-@api_auth.login_required
-def get_todos():
-    """
-        Get all the Todos
-
-        - Args :
-            - None
-
-        - Returns :
-            - (list) : the list of all the Todos
-    """
-    return jsonify(models.get_all_todos())
-
-
-@web_ui.route("/api/todos/<id>", methods=["GET"])
-@api_auth.login_required
-def get_todo_by_id(id):
-    """
-        Get a Todo by its ID
-
-        - Args :
-            - id (str) : the ID of the Todo
-
-        - Returns :
-            - (dict) : the Todo
-    """
-    return jsonify(models.get_todo(uuid.UUID(id)))
-
-
-@web_ui.route("/api/todos", methods=["POST"])
-@api_auth.login_required
-@api.validate(body=Request(Todo))
-def create_todo():
-    """
-        Create a new Todo
-
-        - Args :
-            - None
-
-        - Returns :
-            - (str) : the HTML for the index page
-    """
-    data = request.json
-    logging.info(f"Adding a new Todo: {data}")
-    models.create_todo(data['task'], \
-                       due=(datetime.strptime(data['due'], "%Y-%m-%d") if 'due' in data.keys() else None), \
-                       complete=(data['complete'] if 'complete' in data.keys() else False))
-
-    return {"message": "Todo created"}, 201
-
-
 # Error Handlers
 
 @web_ui.errorhandler(401)
@@ -219,5 +162,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = config['SECRET_KEY']
     from toudou.views import web_ui
+    from toudou.api import api
     app.register_blueprint(web_ui)
+    app.register_blueprint(api)
     return app
