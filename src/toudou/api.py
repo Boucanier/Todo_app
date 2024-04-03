@@ -107,3 +107,21 @@ def update_todo_by_id(id):
                        complete=(data['complete'] if 'complete' in data.keys() else False))
 
     return {"message": "Todo updated"}, 200
+
+
+@api.route("/todos/<id>", methods=["DELETE"])
+@api_auth.login_required
+def delete_todo_by_id(id):
+    """
+        Delete a Todo by its ID
+
+        - Args :
+            - id (str) : the ID of the Todo
+
+        - Returns :
+            - (dict) : the Todo
+    """
+    logging.info(f"Deleting Todo {id}")
+    models.delete_todo(uuid.UUID(id))
+
+    return {"message": "Todo deleted"}, 200
