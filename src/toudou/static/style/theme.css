@@ -97,13 +97,12 @@ form > input:not([type='file']) {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 250px;
-    height: 30px;
 }
 
-#comp_check > input {
+#update_comp {
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 .del_input:hover {

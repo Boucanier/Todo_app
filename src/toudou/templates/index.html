@@ -68,7 +68,10 @@
                     <h3 id="id_title">No task</h3>
                     {{ update_form.task(class='task_field', id='update_task', placeholder='Edit task') }}
                     {{ update_form.due(class='task_field', id='update_due') }}
-                    {{ update_form.complete(value='complete', id='update_comp') }}
+                    <div id="comp_check">
+                        <label for="update_comp">Complete :</label>
+                        {{ update_form.complete(value='complete', id='update_comp') }}
+                    </div>
                     <br>
                     {{ update_form.action(value='update') }}
                     {{ update_form.id(class='update_id') }}
