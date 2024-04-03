@@ -85,3 +85,25 @@ def create_todo():
                        complete=(data['complete'] if 'complete' in data.keys() else False))
 
     return {"message": "Todo created"}, 201
+
+
+@api.route("/todos/<id>", methods=["PUT"])
+@api_auth.login_required
+@api_check.validate(body=Request(Todo))
+def update_todo_by_id(id):
+    """
+        Update a Todo by its ID
+
+        - Args :
+            - id (str) : the ID of the Todo
+
+        - Returns :
+            - (dict) : the Todo
+    """
+    data = request.json
+    logging.info(f"Updating Todo {id}: {data}")
+    models.update_todo(uuid.UUID(id), data['task'], \
+                       due=(datetime.strptime(data['due'], "%Y-%m-%d") if 'due' in data.keys() else None), \
+                       complete=(data['complete'] if 'complete' in data.keys() else False))
+
+    return {"message": "Todo updated"}, 200
