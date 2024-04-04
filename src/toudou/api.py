@@ -47,7 +47,21 @@ def get_todos():
         - Returns :
             - (list) : the list of all the Todos
     """
-    return jsonify(models.get_all_todos())
+    todos = models.get_all_todos()
+
+    # Complete filter
+    if request.args.get('complete')  == "true":
+        todos = [todo for todo in todos if todo.complete]
+    elif request.args.get('complete')  == "false":
+        todos = [todo for todo in todos if not todo.complete]
+
+    # Due filter
+    if request.args.get('due') == "null":
+        todos = [todo for todo in todos if todo.due == None]
+    elif request.args.get('due'):
+        todos = [todo for todo in todos if todo.due == datetime.strptime(request.args.get('due'), "%Y-%m-%d")]
+
+    return jsonify(todos)
 
 
 @api.route("/todos/<id>", methods=["GET"])
