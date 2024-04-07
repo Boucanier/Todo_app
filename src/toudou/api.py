@@ -27,9 +27,15 @@ def verify_token(token):
         logging.error(f"Token {token} is invalid")
         return None
 
+
 class Todo(BaseModel):
-    task: constr() = Field(..., description="The task to do") # type: ignore
+    task: constr() = Field(description="The task to do") # type: ignore
     complete: bool = Field(False, description="The completion status of the task")
+    due: date = Field(None, description="The due date of the task") # type: ignore
+
+class Todo_Patch(BaseModel):
+    task: constr() = Field(None, description="The task to do") # type: ignore
+    complete: bool = Field(None, description="The completion status of the task")
     due: date = Field(None, description="The due date of the task") # type: ignore
 
 
@@ -115,12 +121,17 @@ def update_todo_by_id(id):
             - (dict) : the Todo
     """
     data = request.json
-    logging.info(f"Updating Todo {id}: {data}")
+
+    if not models.get_todo(uuid.UUID(id)) :
+        logging.warning(f"[PUT] - Todo {id} requested but not existing")
+        return {"message": "Todo not replaced"}
+    
+    logging.info(f"Replacing Todo {id}: {data}")
     models.update_todo(uuid.UUID(id), data['task'], \
                        due=(datetime.strptime(data['due'], "%Y-%m-%d") if 'due' in data.keys() else None), \
                        complete=(data['complete'] if 'complete' in data.keys() else False))
 
-    return {"message": "Todo updated"}, 200
+    return {"message": "Todo replaced"}, 200
 
 
 @api.route("/todos/<id>", methods=["DELETE"])
@@ -135,7 +146,38 @@ def delete_todo_by_id(id):
         - Returns :
             - (dict) : the Todo
     """
+    if not models.get_todo(uuid.UUID(id)) :
+        logging.warning(f"[DELETE] - Todo {id} requested but not existing")
+        return {"message": "Todo not updated"}
+    
     logging.info(f"Deleting Todo {id}")
     models.delete_todo(uuid.UUID(id))
 
     return {"message": "Todo deleted"}, 200
+
+
+@api.route("/todos/<id>", methods=["PATCH"])
+@api_auth.login_required
+@api_check.validate(body=Request(Todo_Patch))
+def patch_todo(id):
+    """
+        Patch a Todo by its ID
+
+        - Args :
+            - id (str) : the ID of the Todo
+
+        - Returns :
+            - (dict) : the Todo
+    """
+    data = request.json
+    old_todo = models.get_todo(uuid.UUID(id))
+    if not old_todo :
+        logging.warning(f"[PATCH] - Todo {id} requested but not existing")
+        return {"message": "Todo not updated"}
+    
+    logging.info(f"Updating Todo {id}: {data}")
+    models.update_todo(uuid.UUID(id), data['task'] if 'task' in data.keys() else old_todo.task, \
+                       due=(datetime.strptime(data['due'], "%Y-%m-%d") if 'due' in data.keys() else old_todo.due), \
+                       complete=(data['complete'] if 'complete' in data.keys() else old_todo.complete))
+    
+    return {"message": "Todo updated"}, 200
