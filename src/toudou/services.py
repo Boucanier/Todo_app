@@ -1,3 +1,10 @@
+"""
+    This module contains the services of the application
+
+    - Services :
+        - export_to_csv : export all the Todos to a CSV file
+        - import_from_csv : import all the Todos from a CSV file
+"""
 import csv
 import dataclasses
 import io

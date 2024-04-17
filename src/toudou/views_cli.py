@@ -1,3 +1,6 @@
+"""
+    This module contains the command line interface (CLI) for the toudou application.
+"""
 import click
 import uuid
 

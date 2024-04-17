@@ -1,9 +1,12 @@
-from flask import Flask, abort, flash, redirect, render_template, request, send_file, Blueprint, url_for, jsonify
+"""
+    This module contains the routes for the Toudou app web interface
+"""
+from flask import abort, flash, redirect, render_template, request, send_file, Blueprint, url_for
 from datetime import datetime
 import uuid, os, logging
 from toudou import services, config
-from toudou.forms import AddForm, UpdateForm, DeleteForm
-from toudou.auth import auth
+from toudou.web_views.forms import AddForm, UpdateForm, DeleteForm
+from toudou.web_views.auth import auth
 
 import toudou.models as models
 
@@ -15,6 +18,15 @@ web_ui = Blueprint('web_ui', __name__, url_prefix="/")
 
 @web_ui.route("/error/<code>", methods=["GET", "POST"])
 def error(code):
+    """
+        Render the error page
+
+        - Args :
+            - code (str) : the error code
+
+        - Returns :
+            - (str) : the HTML for the error page
+    """
     return render_template(f"error.html", role=auth.get_user_roles(auth.username()), error=code)
 
 
@@ -22,6 +34,15 @@ def error(code):
 @web_ui.route("/<page>")
 @auth.login_required
 def show(page):
+    """
+        Render the requested page
+
+        - Args :
+            - page (str) : the page to render
+
+        - Returns :
+            - (str) : the HTML for the requested page
+    """
     if os.path.exists(os.path.join("src", "toudou", "templates", f"{page}.html")):
         if "user" in auth.get_user_roles(auth.username()) and page not in ("index", "export"):
             abort(403)
@@ -124,6 +145,15 @@ def out():
 
 @web_ui.errorhandler(401)
 def handle_401(error):
+    """
+        Handle 401 errors
+        
+        - Args :
+            - error (str) : the error message
+
+        - Returns :
+            - (str) : the HTML for the error page
+    """
     flash("401: Unauthorized")
     logging.exception(error)
     return redirect(url_for('web_ui.error', code=401))
@@ -131,6 +161,15 @@ def handle_401(error):
 
 @web_ui.errorhandler(403)
 def handle_403(error):
+    """
+        Handle 403 errors
+
+        - Args :
+            - error (str) : the error message
+
+        - Returns :
+            - (str) : the HTML for the error page
+    """
     flash("403: Forbidden")
     logging.exception(error)
     return redirect(url_for('web_ui.error', code=403))
@@ -138,6 +177,15 @@ def handle_403(error):
 
 @web_ui.errorhandler(404)
 def handle_404(error):
+    """
+        Handle 404 errors
+
+        - Args :
+            - error (str) : the error message
+
+        - Returns :
+            - (str) : the HTML for the error page
+    """
     flash("404: Page not found")
     logging.exception(error)
     return redirect(url_for('web_ui.error', code=404))
@@ -145,6 +193,15 @@ def handle_404(error):
 
 @web_ui.errorhandler(405)
 def handle_405(error):
+    """
+        Handle 405 errors
+
+        - Args :
+            - error (str) : the error message
+
+        - Returns :
+            - (str) : the HTML for the error page
+    """
     flash("405: Method Not Allowed")
     logging.exception(error)
     return redirect(url_for('web_ui.error', code=405))
@@ -152,18 +209,15 @@ def handle_405(error):
 
 @web_ui.errorhandler(500)
 def handle_500(error):
+    """
+        Handle 500 errors
+
+        - Args :
+            - error (str) : the error message
+
+        - Returns :
+            - (str) : the HTML for the error page
+    """
     flash("500: Internal Server Error")
     logging.exception(error)
     return redirect(url_for('web_ui.error', code=500))
-
-
-
-def create_app():
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = config['SECRET_KEY']
-    from toudou.views import web_ui
-    from toudou.api import api, spec
-    spec.register(app)
-    app.register_blueprint(web_ui)
-    app.register_blueprint(api)
-    return app

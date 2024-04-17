@@ -29,6 +29,12 @@ todos_table = Table(
 class Todo:
     """
         The Todo class, representing a task to do with its completion status and its due date
+
+        - Attributes :
+            - id (uuid.UUID) : the id of the Todo
+            - task (str) : the task to do
+            - complete (bool) : the completion status of the task
+            - due (datetime | None) : the due date of the task
     """
     id: uuid.UUID
     task: str

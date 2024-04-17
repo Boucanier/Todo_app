@@ -1,46 +1,20 @@
+"""
+    This module contains the routes of the API
+"""
 from datetime import date, datetime
 from flask import Blueprint, jsonify, request
-from flask_httpauth import HTTPTokenAuth
 from spectree import SpecTree, SecurityScheme
-from pydantic import BaseModel, Field, constr
 import uuid, logging
 
 import toudou.models as models
-
-api_auth = HTTPTokenAuth(scheme='Bearer')
+from toudou.api.auth import api_auth
+from toudou.api.models import Todo, Todo_Patch
 
 spec = SpecTree("flask", annotations=True, title="Toudou API",
     security_schemes=[SecurityScheme(name="bearer_token", data={"type": "http", "scheme": "bearer"})],
     security=[{"bearer_token": []}]) # Access swagger doc at [server adress]/apidoc/swagger/
 
 api = Blueprint('api', __name__, url_prefix="/api")
-
-tokens = {
-    "tk1": "user1",
-    "tk2": "user2"
-}
-
-
-@api_auth.verify_token
-def verify_token(token):
-    if token in tokens:
-        logging.info(f"Token {token} is valid -> user = {tokens[token]}")
-        return tokens[token]
-
-    else:
-        logging.error(f"Token {token} is invalid")
-        return None
-
-
-class Todo(BaseModel):
-    task: constr() = Field(description="The task to do") # type: ignore
-    complete: bool = Field(False, description="The completion status of the task")
-    due: date = Field(None, description="The due date of the task") # type: ignore
-
-class Todo_Patch(BaseModel):
-    task: constr() = Field(None, description="The task to do") # type: ignore
-    complete: bool = Field(None, description="The completion status of the task")
-    due: date = Field(None, description="The due date of the task") # type: ignore
 
 
 # Routes
