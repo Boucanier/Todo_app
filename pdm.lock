@@ -41,16 +41,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "flask-pydantic-spec"
-version = "0.6.0"
-requires_python = ">=3.8"
-summary = "generate OpenAPI document and validate request & response with Python annotations."
-dependencies = [
-    "inflection<1,>=0.5.0",
-    "pydantic<2,>=1.2",
-]
-
-[[package]]
 name = "flask-wtf"
 version = "1.2.1"
 requires_python = ">=3.8"
@@ -75,12 +65,6 @@ summary = "WSGI HTTP Server for UNIX"
 dependencies = [
     "packaging",
 ]
-
-[[package]]
-name = "inflection"
-version = "0.5.1"
-requires_python = ">=3.5"
-summary = "A port of Ruby on Rails inflector to Python"
 
 [[package]]
 name = "itsdangerous"
@@ -119,6 +103,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "spectree"
+version = "1.2.9"
+requires_python = ">=3.8"
+summary = "generate OpenAPI document and validate request&response with Python annotations."
+dependencies = [
+    "pydantic<3,>=1.2",
+]
+
+[[package]]
 name = "sqlalchemy"
 version = "2.0.29"
 requires_python = ">=3.7"
@@ -154,7 +147,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:7df86d4dc9e6a79689eaa32f21d1d122459740f72fff50b4d8c017b7b480ec4d"
+content_hash = "sha256:dcd2615d3f57cf4a32a4db21109ab37a570824b030892912f18c539fc234bc87"
 
 [metadata.files]
 "blinker 1.7.0" = [
@@ -176,10 +169,6 @@ content_hash = "sha256:7df86d4dc9e6a79689eaa32f21d1d122459740f72fff50b4d8c017b7b
 "flask-httpauth 4.8.0" = [
     {url = "https://files.pythonhosted.org/packages/22/21/0160aa217c4df74e44a04919213f9c8af7e68551c10267b055f1e09d421c/Flask-HTTPAuth-4.8.0.tar.gz", hash = "sha256:66568a05bc73942c65f1e2201ae746295816dc009edd84b482c44c758d75097a"},
     {url = "https://files.pythonhosted.org/packages/83/c4/e64ace124b927cd1f29270050ee0e0ef5faad75a512c5c8d733961dda9ca/Flask_HTTPAuth-4.8.0-py3-none-any.whl", hash = "sha256:a58fedd09989b9975448eef04806b096a3964a7feeebc0a78831ff55685b62b0"},
-]
-"flask-pydantic-spec 0.6.0" = [
-    {url = "https://files.pythonhosted.org/packages/4b/17/53a9e2f000d1771461da7bdd207167f5dfe44225a48d0436837987d33f55/flask_pydantic_spec-0.6.0.tar.gz", hash = "sha256:f20d63cba821dfaaa92fa19c1e1975e0acf544ea6a3cc9eb5cbac62a81117790"},
-    {url = "https://files.pythonhosted.org/packages/92/35/684431bec6e8b2808ce617493d1ae51a0c2b0c0fc821b7dfa561a255e12a/flask_pydantic_spec-0.6.0-py3-none-any.whl", hash = "sha256:480689102eed43900b2164d07af930221a2379253ed06337d280a47224990035"},
 ]
 "flask-wtf 1.2.1" = [
     {url = "https://files.pythonhosted.org/packages/02/2b/0f0cf68a2f052ea3dbb8b6c8c2a7e8aea5e6df7410f5e289437fefbeb461/flask_wtf-1.2.1-py3-none-any.whl", hash = "sha256:fa6793f2fb7e812e0fe9743b282118e581fb1b6c45d414b8af05e659bd653287"},
@@ -248,10 +237,6 @@ content_hash = "sha256:7df86d4dc9e6a79689eaa32f21d1d122459740f72fff50b4d8c017b7b
 "gunicorn 21.2.0" = [
     {url = "https://files.pythonhosted.org/packages/06/89/acd9879fa6a5309b4bf16a5a8855f1e58f26d38e0c18ede9b3a70996b021/gunicorn-21.2.0.tar.gz", hash = "sha256:88ec8bff1d634f98e61b9f65bc4bf3cd918a90806c6f5c48bc5603849ec81033"},
     {url = "https://files.pythonhosted.org/packages/0e/2a/c3a878eccb100ccddf45c50b6b8db8cf3301a6adede6e31d48e8531cab13/gunicorn-21.2.0-py3-none-any.whl", hash = "sha256:3213aa5e8c24949e792bcacfc176fef362e7aac80b76c56f6b5122bf350722f0"},
-]
-"inflection 0.5.1" = [
-    {url = "https://files.pythonhosted.org/packages/59/91/aa6bde563e0085a02a435aa99b49ef75b0a4b062635e606dab23ce18d720/inflection-0.5.1-py2.py3-none-any.whl", hash = "sha256:f38b2b640938a4f35ade69ac3d053042959b62a0f1076a5bbaa1b9526605a8a2"},
-    {url = "https://files.pythonhosted.org/packages/e1/7e/691d061b7329bc8d54edbf0ec22fbfb2afe61facb681f9aaa9bff7a27d04/inflection-0.5.1.tar.gz", hash = "sha256:1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417"},
 ]
 "itsdangerous 2.1.2" = [
     {url = "https://files.pythonhosted.org/packages/68/5f/447e04e828f47465eeab35b5d408b7ebaaaee207f48b7136c5a7267a30ae/itsdangerous-2.1.2-py3-none-any.whl", hash = "sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44"},
@@ -364,6 +349,10 @@ content_hash = "sha256:7df86d4dc9e6a79689eaa32f21d1d122459740f72fff50b4d8c017b7b
     {url = "https://files.pythonhosted.org/packages/e6/1e/f6871bb4b72e089390972e903e206957cda44c88ea78fc8ee8ea105f41c6/pydantic-1.10.14-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:d604be0f0b44d473e54fdcb12302495fe0467c56509a2f80483476f3ba92b33c"},
     {url = "https://files.pythonhosted.org/packages/ee/2d/426c0e9058cfca47e21fa7c1f35eef63f71b9feeb232bc57f3c1aa4a4d71/pydantic-1.10.14-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:13e86a19dca96373dcf3190fcb8797d40a6f12f154a244a8d1e8e03b8f280593"},
     {url = "https://files.pythonhosted.org/packages/f6/24/7c457e3b40d0ad4adaeec8580b5ba67f46c04ed2b59f814d8f8f051a445c/pydantic-1.10.14-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:53e3819bd20a42470d6dd0fe7fc1c121c92247bca104ce608e609b59bc7a77ee"},
+]
+"spectree 1.2.9" = [
+    {url = "https://files.pythonhosted.org/packages/79/b6/6aaa4636cc61efc5af7fe875b15b0d5a3233d7e6da1704c18c6a7fb0f437/spectree-1.2.9.tar.gz", hash = "sha256:8f7a29a0cfc32d6c1ca48723e72547579c1175fa8a3eab7c6a814b30de3e48dc"},
+    {url = "https://files.pythonhosted.org/packages/f9/ac/304be5f726bc61d06921afa60e218234adf4e18535ebf59b904d3214ffed/spectree-1.2.9-py3-none-any.whl", hash = "sha256:0a85114540ddf938be524ac060e0297ce2d753e96979c41ee7c1a3a68561a460"},
 ]
 "sqlalchemy 2.0.29" = [
     {url = "https://files.pythonhosted.org/packages/06/1f/3e65bcc657a8632b743450416039a92528b229bd36f77e8d802fa828adac/SQLAlchemy-2.0.29-cp312-cp312-win_amd64.whl", hash = "sha256:9b19836ccca0d321e237560e475fd99c3d8655d03da80c845c4da20dda31b6e1"},

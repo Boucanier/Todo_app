@@ -1,19 +1,23 @@
 from datetime import date, datetime
-from flask import Blueprint, Request, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_httpauth import HTTPTokenAuth
-from flask_pydantic_spec import FlaskPydanticSpec, Request
+from spectree import SpecTree, SecurityScheme
 from pydantic import BaseModel, Field, constr
 import uuid, logging
 
 import toudou.models as models
 
 api_auth = HTTPTokenAuth(scheme='Bearer')
-api_check = FlaskPydanticSpec('flask')
+
+spec = SpecTree("flask", annotations=True, title="Toudou API",
+    security_schemes=[SecurityScheme(name="bearer_token", data={"type": "http", "scheme": "bearer"})],
+    security=[{"bearer_token": []}]) # Access swagger doc at [server adress]/apidoc/swagger/
+
 api = Blueprint('api', __name__, url_prefix="/api")
 
 tokens = {
-    "tk1": "jules",
-    "tk2": "matis"
+    "tk1": "user1",
+    "tk2": "user2"
 }
 
 
@@ -87,7 +91,7 @@ def get_todo_by_id(id):
 
 @api.route("/todos", methods=["POST"])
 @api_auth.login_required
-@api_check.validate(body=Request(Todo))
+@spec.validate(tags=["api"], json=Todo)
 def create_todo():
     """
         Create a new Todo
@@ -99,6 +103,7 @@ def create_todo():
             - (str) : the HTML for the index page
     """
     data = request.json
+
     logging.info(f"Adding a new Todo: {data}")
     models.create_todo(data['task'], \
                        due=(datetime.strptime(data['due'], "%Y-%m-%d") if 'due' in data.keys() else None), \
@@ -109,7 +114,7 @@ def create_todo():
 
 @api.route("/todos/<id>", methods=["PUT"])
 @api_auth.login_required
-@api_check.validate(body=Request(Todo))
+@spec.validate(tags=["api"], json=Todo)
 def update_todo_by_id(id):
     """
         Update a Todo by its ID
@@ -158,7 +163,7 @@ def delete_todo_by_id(id):
 
 @api.route("/todos/<id>", methods=["PATCH"])
 @api_auth.login_required
-@api_check.validate(body=Request(Todo_Patch))
+@spec.validate(tags=["api"], json=Todo_Patch)
 def patch_todo(id):
     """
         Patch a Todo by its ID
