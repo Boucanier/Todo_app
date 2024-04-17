@@ -34,16 +34,18 @@ La connexion au site est une connexion http basique. Les deux rôles existants s
 
 Deux utilisateurs existent par défaut : *admin* et *user*. Leurs mots de passe sont respectivement *admin* et *user*.
 
-### API
+### API RESTful
 
-Les fonctions de l'**API REST** permettent de manipuler les todos depuis un client externe. Les routes de l'API sont les suivantes :
+Les fonctions de l'**API RESTful** permettent de manipuler les todos depuis un client externe. Les routes de l'API sont les suivantes :
 
-- `/api/todos` : récupère tous les todos
-- `/api/todos/<int:id>` : récupère un todo
+- `/api/todos` (GET) : récupère tous les todos
+- `/api/todos/<int:id>` (GET) : récupère un todo
 - `/api/todos` (POST) : crée un todo
 - `/api/todos/<int:id>` (PUT) : met à jour un todo
 - `/api/todos/<int:id>` (PATCH) : met à jour un todo (partiellement)
 - `/api/todos/<int:id>` (DELETE) : supprime un todo
+
+Les **tokens** existants sont : ***tk1*** et ***tk2***.
 
 ## Contenu de [src/toudou](src/toudou) (code source de l'application)
 
@@ -52,7 +54,7 @@ Les fonctions de l'**API REST** permettent de manipuler les todos depuis un clie
 - [models.py](src/toudou/models.py) : classe Todo et fonctions pour les manipuler
 - [services.py](src/toudou/services.py) : fonctions pour exporter ou importer des todos au format CSV
 - [views_cli.py](src/toudou/views_cli.py) : fonctions pour gérer les commandes de l'application depuis un terminal
-- [views.py](src/toudou/web_views/routes.py) : routes de l'application web, permet de créer l'application Flask
+- [views.py](src/toudou/views.py) : routes de l'application web, permet de créer l'application Flask
 - [templates](src/toudou/templates) : templates html utilisés par l'application
   - [header.html](src/toudou/templates/header.html) : header html
   - [index.html](src/toudou/templates/index.html) : page d'accueil (affichage des todos, création, suppression, modification)
