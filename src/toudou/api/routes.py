@@ -1,7 +1,7 @@
 """
     This module contains the routes of the API
 """
-from datetime import date, datetime
+from datetime import datetime
 from flask import Blueprint, jsonify, request
 from spectree import SpecTree, SecurityScheme
 import uuid, logging
