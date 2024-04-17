@@ -27,4 +27,4 @@ build-backend = "pdm.backend"
 [tool.pdm.scripts]
 _.env_file = "dev.env"
 start.env_file = "dev.env"
-start.cmd = "flask --app toudou.app --debug run"
+start.cmd = "flask --app toudou.views --debug run"
