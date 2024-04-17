@@ -138,7 +138,12 @@ def out():
             - (str) : the HTML for the index page
     """
     logging.info(f"Logging out user {auth.username()}")
-    return redirect("http://nouser:nouser@localhost:5000/")
+
+    # We get the listening port to redirect to the correct URL
+    port = request.environ.get('SERVER_PORT')
+
+    # We redirect to the index page with false credentials
+    return redirect("http://nouser:nouser@localhost:" + str(port) + "/")
 
 
 # Error Handlers
