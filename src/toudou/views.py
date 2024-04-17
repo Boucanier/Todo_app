@@ -162,7 +162,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = config['SECRET_KEY']
     from toudou.views import web_ui
-    from toudou.api import api
+    from toudou.api import api, spec
+    spec.register(app)
     app.register_blueprint(web_ui)
     app.register_blueprint(api)
     return app
