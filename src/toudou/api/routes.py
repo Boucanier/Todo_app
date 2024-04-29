@@ -21,6 +21,7 @@ api = Blueprint('api', __name__, url_prefix="/api")
 
 @api.route("/todos", methods=["GET"])
 @api_auth.login_required
+@spec.validate(tags=["api"])
 def get_todos():
     """
         Get all the Todos
@@ -50,6 +51,7 @@ def get_todos():
 
 @api.route("/todos/<id>", methods=["GET"])
 @api_auth.login_required
+@spec.validate(tags=["api"])
 def get_todo_by_id(id):
     """
         Get a Todo by its ID
@@ -115,6 +117,7 @@ def update_todo_by_id(id):
 
 @api.route("/todos/<id>", methods=["DELETE"])
 @api_auth.login_required
+@spec.validate(tags=["api"])
 def delete_todo_by_id(id):
     """
         Delete a Todo by its ID
