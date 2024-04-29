@@ -1,3 +1,3 @@
-from toudou.views import create_app
+from toudou.app import create_app
 
 app = create_app()

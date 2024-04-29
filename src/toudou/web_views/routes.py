@@ -1,7 +1,7 @@
 """
     This module contains the routes for the Toudou app web interface
 """
-from flask import Flask, abort, flash, redirect, render_template, request, send_file, Blueprint, url_for
+from flask import abort, flash, redirect, render_template, request, send_file, Blueprint, url_for
 from datetime import datetime
 import uuid, os, logging
 from toudou import services, config
@@ -226,23 +226,3 @@ def handle_500(error):
     flash("500: Internal Server Error")
     logging.exception(error)
     return redirect(url_for('web_ui.error', code=500))
-
-
-def create_app():
-    """
-        Create the Flask app instance
-
-        - Args :
-            - None
-
-        - Returns :
-            - (Flask) : the Flask app instance
-    """
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = config['SECRET_KEY']
-    from toudou.views import web_ui
-    from toudou.api.routes import api, spec
-    spec.register(app)
-    app.register_blueprint(web_ui)
-    app.register_blueprint(api)
-    return app
